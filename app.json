@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "FallbrookRacquet",
+    "slug": "FallbrookRacquet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {},
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {},
+    "web": {}
+  }
+}
