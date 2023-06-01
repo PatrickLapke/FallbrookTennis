@@ -6,14 +6,14 @@ import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required().label("FirstName"),
-  lastName: Yup.string().required().label("LastName"),
+  firstName: Yup.string().required().label("First Name"),
+  lastName: Yup.string().required().label("Last Name"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
   confirmPassword: Yup.string().oneOf([Yup.ref("password")]),
 });
 
-function RegisterScreen(props) {
+function RegisterScreen() {
   return (
     <Screen styles={styles.container}>
       <AppForm
@@ -68,10 +68,11 @@ function RegisterScreen(props) {
           autoCorrect={false}
           icon="lock"
           name="confirmPassword"
-          placeholder="Password"
+          placeholder="Confirm Password"
           secureTextEntry
           textContentType="password"
         />
+        <SubmitButton title={"Register"} />
       </AppForm>
     </Screen>
   );
