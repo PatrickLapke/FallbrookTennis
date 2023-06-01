@@ -72,7 +72,7 @@ function RegisterScreen() {
           secureTextEntry
           textContentType="password"
         />
-        <SubmitButton title={"Register"} />
+        <SubmitButton title="Register" />
       </AppForm>
     </Screen>
   );
