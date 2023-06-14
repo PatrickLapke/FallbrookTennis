@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Touchable } from "react-native";
 import axios from "axios";
-import { Row, Rows, Table } from "react-native-table-component";
 
 const timeSlots = [
   "7:00-8:30",
@@ -23,7 +22,7 @@ const CourtsList = () => {
 
   const fetchDays = async () => {
     try {
-      const response = await axios.get("");
+      const response = await axios.get();
       setDays(response.data);
     } catch (error) {
       console.log("Error fetching courts:", error);

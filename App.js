@@ -1,13 +1,9 @@
 import React from "react";
-import Toggle from "./app/components/Toggle";
-import TennisBooking from "./app/screens/TennisBooking";
-import CourtDisplayBox from "./app/components/CourtDisplayBox";
-import Screen from "./app/components/Screen";
+
+import TennisBookingScreen from "./app/screens/TennisBookingScreen";
+import AppDisplayBox from "./app/components/AppDisplayBox";
+import LoginScreen from "./app/screens/LoginScreen";
 
 export default function App() {
-  return (
-    <Screen>
-      <CourtDisplayBox></CourtDisplayBox>
-    </Screen>
-  );
+  return <TennisBookingScreen></TennisBookingScreen>;
 }

@@ -1,13 +1,12 @@
 const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema({
-  day: { type: String, required: true },
-  timeSlot: { type: String, required: true },
-  isBooked: { type: Boolean, default: false },
+  startTime: { type: Date, required: true },
+  endTime: { type: Date, required: true },
 });
 
 const courtSchema = new mongoose.Schema({
-  courtId: { type: Number, required: true, unique: true },
+  courtName: { type: String, required: true, unique: true },
   bookings: [bookingSchema],
 });
 
