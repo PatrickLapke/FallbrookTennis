@@ -1,4 +1,4 @@
-const Court = require("./courtSchema");
+const { tennisCourt } = require("../models/tennisCourt");
 
 const mongoose = require("mongoose");
 const uri =
@@ -10,7 +10,7 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDb...", err));
 
 const createCourt = async (name) => {
-  const court = new Court({
+  const court = new tennisCourt({
     courtName: name,
   });
 
@@ -22,4 +22,5 @@ const createCourt = async (name) => {
   }
 };
 
-createCourt("Court 2");
+createCourt("Court 8");
+createCourt("Court 9");

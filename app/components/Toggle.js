@@ -12,12 +12,14 @@ function Toggle({ isSingles, setIsSingles }) {
         color={isSingles ? "primary" : "light"}
         title={"Singles"}
         onPress={() => setIsSingles(true)}
+        textColor={isSingles ? "white" : "black"}
       />
       <AppButton
         width="40%"
         color={isSingles === false ? "primary" : "light"}
         title={"Doubles"}
         onPress={() => setIsSingles(false)}
+        textColor={isSingles === false ? "white" : "black"}
       />
     </View>
   );

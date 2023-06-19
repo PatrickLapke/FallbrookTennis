@@ -1,15 +1,27 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import AppText from "./AppText";
 import colors from "../config/colors";
 
-function CourtDisplayText({ court, setSelectedCourt }) {
+function CourtDisplayText({ court, selectedCourt, setSelectedCourt }) {
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[
+        styles.container,
+        selectedCourt && selectedCourt._id === court._id && styles.selected,
+      ]}
       onPress={() => setSelectedCourt(court)}
     >
-      <AppText style={styles.text}>{court.courtName}</AppText>
+      <AppText
+        style={[
+          styles.text,
+          selectedCourt &&
+            selectedCourt._id === court._id &&
+            styles.selectedText,
+        ]}
+      >
+        {court.courtName}
+      </AppText>
     </TouchableOpacity>
   );
 }
@@ -20,7 +32,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.black,
   },
-  text: { padding: 15, fontSize: 25 },
+  selected: {
+    backgroundColor: colors.primary,
+  },
+  selectedText: {
+    color: colors.white,
+  },
+  text: { padding: 15, fontSize: 21 },
 });
 
 export default CourtDisplayText;
