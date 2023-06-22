@@ -1,3 +1,4 @@
+const auth = require("../middleware/auth");
 const { tennisCourt, validate } = require("../models/tennisCourt");
 const mongoose = require("mongoose");
 const express = require("express");
@@ -21,7 +22,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/bookings", async (req, res) => {
+router.post("/bookings", auth, async (req, res) => {
   const { startTime, endTime, courtId } = req.body;
   try {
     const court = await tennisCourt.findById(courtId);
@@ -31,7 +32,7 @@ router.post("/bookings", async (req, res) => {
     await court.save();
     res.status(200).send("Booking added to court.");
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
   }
 });
 

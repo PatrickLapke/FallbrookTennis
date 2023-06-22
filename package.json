@@ -9,12 +9,18 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.17.11",
     "axios": "^1.4.0",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.9",
     "date-fns": "^2.30.0",
     "expo": "~48.0.15",
     "expo-constants": "~14.2.1",
     "expo-status-bar": "~1.4.4",
     "formik": "^2.4.0",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "lodash": "^4.17.21",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-table-component": "^1.2.2",

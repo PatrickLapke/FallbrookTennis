@@ -1,6 +1,13 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import * as Yup from "yup";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
@@ -11,49 +18,73 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen() {
+  const handleLogin = async (values) => {
+    const { email, password } = values;
+    console.log(values);
+    try {
+      const response = await axios.post("http://192.168.0.16:3000/api/auth", {
+        email: email,
+        password: password,
+      });
+      console.log("Login success.");
+      await AsyncStorage.setItem("token", response.headers["x-auth-token"]);
+      console.log(response.headers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Screen style={styles.container}>
-      <Image style={styles.logo} source={require("../assets/tennis.png")} />
-
-      <AppForm
-        initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => console.log(values)}
-        validationSchema={validationSchema}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        <AppFormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="email"
-          keyboardType="email-address"
-          name="email"
-          placeholder="Email"
-          textContentType="emailAddress"
+        <Image
+          style={styles.logo}
+          source={require("../assets/fallbrook-logo.png")}
         />
-        <AppFormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="lock"
-          name="password"
-          placeholder="Password"
-          secureTextEntry
-          textContentType="password"
-        />
-        <SubmitButton title="Login" />
-      </AppForm>
+
+        <AppForm
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleLogin}
+          validationSchema={validationSchema}
+        >
+          <AppFormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon="email"
+            keyboardType="email-address"
+            name="email"
+            placeholder="Email"
+            textContentType="emailAddress"
+          />
+          <AppFormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon="lock"
+            name="password"
+            placeholder="Password"
+            secureTextEntry
+            textContentType="password"
+          />
+          <SubmitButton title="Login" />
+        </AppForm>
+      </KeyboardAvoidingView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
+    flex: 1,
   },
   logo: {
     alignSelf: "center",
-    height: 80,
+    height: 220,
     marginBottom: 20,
     marginTop: 50,
-    width: 80,
+    width: 220,
   },
 });
 

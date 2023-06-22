@@ -11,6 +11,7 @@ import CourtDisplayText from "../components/CourtDisplayText";
 import { times } from "../components/times";
 import AppBoxButton from "../components/AppBoxButton";
 import { computeTimes } from "../functions/computeTimes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TennisBooking() {
   const [time, setTime] = useState();
@@ -48,11 +49,19 @@ function TennisBooking() {
         time,
         isSingles
       );
-      await axios.post("http://192.168.0.16:3000/api/tennisCourts/bookings", {
-        startTime: startTime,
-        endTime: endTime,
-        courtId: selectedCourt._id,
-      });
+      await axios.post(
+        "http://192.168.0.16:3000/api/tennisCourts/bookings",
+        {
+          startTime: startTime,
+          endTime: endTime,
+          courtId: selectedCourt._id,
+        },
+        {
+          headers: {
+            "x-auth-token": await AsyncStorage.getItem("token"),
+          },
+        }
+      );
       console.log("Booking added successfully");
     } catch (error) {
       console.log(error);
