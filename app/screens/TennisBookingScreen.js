@@ -31,7 +31,7 @@ function TennisBooking() {
           );
           //toISOString() converts this value to a string so in the backend, it needs to converted back to a date Object.
           const response = await axios.get(
-            `http://192.168.0.16:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+            `http://10.12.64.192:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
           );
           setCourts(response.data);
         } catch (error) {
@@ -50,7 +50,8 @@ function TennisBooking() {
         isSingles
       );
       await axios.post(
-        "http://192.168.0.16:3000/api/tennisCourts/bookings",
+        //10.12.64.192
+        "http://10.12.64.192:3000/api/tennisCourts/bookings",
         {
           startTime: startTime,
           endTime: endTime,

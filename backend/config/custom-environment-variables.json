@@ -1,3 +1,4 @@
 {
-  "jwtPrivateKey": "fallbrook_jwtPrivateKey"
+  "jwtPrivateKey": "fallbrook_jwtPrivateKey",
+  "sendGridAPIKey": "fallbrook_sendGridAPIKey"
 }

@@ -12,10 +12,17 @@ if (!config.get("jwtPrivateKey")) {
   process.exit(1);
 }
 
+//USED SETX HERE DEAL W/ LATER
+if (!config.get("sendGridAPIKey")) {
+  console.log("FATAL ERROR: sendGridAPIKey is not defined.");
+  process.exit(1);
+}
+
 app.use(express.json());
 app.use("/api/users", users);
 app.use("/api/tennisCourts", tennisCourts);
 app.use("/api/auth", auth);
+app.use("/api/verify", require("./routes/verify"));
 
 app.listen(3000, () => {
   console.log("Listening...");

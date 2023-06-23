@@ -1,7 +1,9 @@
 const bcryptjs = require("bcryptjs");
 const _ = require("lodash");
-const { User, validateUser } = require("../models/user");
 const express = require("express");
+
+const sendVerification = require("../utility/sendVerification");
+const { User, validateUser } = require("../models/user");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -19,6 +21,14 @@ router.post("/", async (req, res) => {
   await user.save();
 
   const token = user.generateAuthToken();
+
+  try {
+    await sendVerification(user.email, token);
+    console.log("Email sent...");
+  } catch (error) {
+    console.log(error);
+  }
+
   res.header("x-auth-token", token).send(_.pick(user, ["name", "email"]));
 });
 
