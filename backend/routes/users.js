@@ -17,10 +17,11 @@ router.post("/", async (req, res) => {
 
   const salt = await bcryptjs.genSalt(10);
   user.password = await bcryptjs.hash(user.password, salt);
-  console.log(user.password);
+  console.log(`Here is the hashed password: ${user.password}`);
   await user.save();
 
   const token = user.generateAuthToken();
+  console.log(`Here is the token ${token}`);
 
   try {
     await sendVerification(user.email, token);

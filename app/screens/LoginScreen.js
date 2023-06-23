@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
+const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -22,7 +23,7 @@ function LoginScreen() {
     const { email, password } = values;
     console.log(values);
     try {
-      const response = await axios.post("http://192.168.0.16:3000/api/auth", {
+      const response = await axios.post(`http://${IP_HOME}:3000/api/auth`, {
         email: email,
         password: password,
       });

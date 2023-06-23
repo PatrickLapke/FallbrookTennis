@@ -1,22 +1,10 @@
-const config = require("config");
+require("dotenv").config();
 const express = require("express");
 const app = express();
 
 const users = require("./routes/users");
 const tennisCourts = require("./routes/tennisCourts");
 const auth = require("./routes/auth");
-
-//USED SETX HERE DEAL W/ LATER
-if (!config.get("jwtPrivateKey")) {
-  console.log("FATAL ERROR: jwtPrivateKey is not defined.");
-  process.exit(1);
-}
-
-//USED SETX HERE DEAL W/ LATER
-if (!config.get("sendGridAPIKey")) {
-  console.log("FATAL ERROR: sendGridAPIKey is not defined.");
-  process.exit(1);
-}
 
 app.use(express.json());
 app.use("/api/users", users);
@@ -29,8 +17,8 @@ app.listen(3000, () => {
 });
 
 const mongoose = require("mongoose");
-const uri =
-  "mongodb+srv://plapke:Car37lou@cluster0.osek9lx.mongodb.net/?retryWrites=true&w=majority";
+const connection_string = process.env.DATA_CONNECTION;
+const uri = connection_string;
 
 mongoose
   .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })

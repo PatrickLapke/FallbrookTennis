@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import axios from "axios";
-
 import Screen from "../components/Screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import AppPicker from "../components/AppPicker";
 import Toggle from "../components/Toggle";
 import AppDisplayBox from "../components/AppDisplayBox";
@@ -11,7 +12,7 @@ import CourtDisplayText from "../components/CourtDisplayText";
 import { times } from "../components/times";
 import AppBoxButton from "../components/AppBoxButton";
 import { computeTimes } from "../functions/computeTimes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 function TennisBooking() {
   const [time, setTime] = useState();
@@ -31,7 +32,7 @@ function TennisBooking() {
           );
           //toISOString() converts this value to a string so in the backend, it needs to converted back to a date Object.
           const response = await axios.get(
-            `http://10.12.64.192:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+            `http://${IP_HOME}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
           );
           setCourts(response.data);
         } catch (error) {
@@ -51,7 +52,7 @@ function TennisBooking() {
       );
       await axios.post(
         //10.12.64.192
-        "http://10.12.64.192:3000/api/tennisCourts/bookings",
+        `http://${IP_HOME}:3000/api/tennisCourts/bookings`,
         {
           startTime: startTime,
           endTime: endTime,

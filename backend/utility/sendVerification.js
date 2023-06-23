@@ -1,9 +1,7 @@
-const config = require("config");
+require("dotenv").config();
 const sgMail = require("@sendgrid/mail");
-const jwt = require("jsonwebtoken");
 
-const API_KEY =
-  "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";
+const API_KEY = process.env.SENDGRID_API;
 
 sgMail.setApiKey(API_KEY);
 

@@ -2,10 +2,11 @@ import React from "react";
 import { Image, KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 import axios from "axios";
+import { Platform } from "react-native";
 
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
-import { Platform } from "react-native";
+const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required().label("First Name"),
@@ -23,7 +24,7 @@ function RegisterScreen() {
     const { firstName, lastName, email, password } = values;
     console.log(values);
     try {
-      await axios.post("http://192.168.0.16:3000/api/users", {
+      await axios.post(`http://${IP_HOME}:3000/api/users`, {
         name: `${firstName} ${lastName}`,
         email: email,
         password: password,
