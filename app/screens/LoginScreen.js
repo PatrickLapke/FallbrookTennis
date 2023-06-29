@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Image,
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { Image, KeyboardAvoidingView, StyleSheet } from "react-native";
 import * as Yup from "yup";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,15 +16,15 @@ const validationSchema = Yup.object().shape({
 function LoginScreen() {
   const handleLogin = async (values) => {
     const { email, password } = values;
-    console.log(values);
+
     try {
       const response = await axios.post(`http://${IP_HOME}:3000/api/auth`, {
         email: email,
         password: password,
       });
-      console.log("Login success.");
+
       await AsyncStorage.setItem("token", response.headers["x-auth-token"]);
-      console.log(response.headers);
+      await AsyncStorage.setItem("user._id", response.headers["x-user-id"]);
     } catch (error) {
       console.log(error);
     }

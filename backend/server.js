@@ -4,11 +4,13 @@ const app = express();
 
 const users = require("./routes/users");
 const tennisCourts = require("./routes/tennisCourts");
+const pickleballCourts = require("./routes/pickleBallCourts");
 const auth = require("./routes/auth");
 
 app.use(express.json());
 app.use("/api/users", users);
 app.use("/api/tennisCourts", tennisCourts);
+app.use("/api/pickleballCourts", pickleballCourts);
 app.use("/api/auth", auth);
 app.use("/api/verify", require("./routes/verify"));
 
@@ -17,6 +19,7 @@ app.listen(3000, () => {
 });
 
 const mongoose = require("mongoose");
+const { pickleballCourt } = require("./models/pickleballCourt");
 const connection_string = process.env.DATA_CONNECTION;
 const uri = connection_string;
 

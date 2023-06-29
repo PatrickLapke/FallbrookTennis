@@ -6,7 +6,8 @@ const { User } = require("../models/user");
 
 router.get("/:token", async (req, res) => {
   try {
-    const payload = jwt.verify(req.params.token, config.get("jwtPrivateKey"));
+    console.log(process.env.JWT_PRIVATE_KEY);
+    const payload = jwt.verify(req.params.token, process.env.JWT_PRIVATE_KEY);
 
     const user = await User.findById(payload._id);
     if (!user)

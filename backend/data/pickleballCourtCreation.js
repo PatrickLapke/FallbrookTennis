@@ -1,5 +1,5 @@
 require("dotenv").config({ path: "../.env" });
-const { tennisCourt } = require("../models/tennisCourt");
+const { pickleballCourt } = require("../models/pickleballCourt");
 
 const mongoose = require("mongoose");
 const uri = process.env.DATA_CONNECTION;
@@ -10,7 +10,7 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDb...", err));
 
 const createCourt = async (name) => {
-  const court = new tennisCourt({
+  const court = new pickleballCourt({
     courtName: name,
   });
 
@@ -22,5 +22,4 @@ const createCourt = async (name) => {
   }
 };
 
-// createCourt("Court 8");
-// createCourt("Court 9");
+// createCourt("Court 12");

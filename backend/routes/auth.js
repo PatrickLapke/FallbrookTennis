@@ -2,7 +2,6 @@ const Joi = require("joi");
 const bcryptjs = require("bcryptjs");
 const _ = require("lodash");
 const { User, validate } = require("../models/user");
-const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
@@ -20,7 +19,14 @@ router.post("/", async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid email or password.");
 
   const token = user.generateAuthToken();
-  res.header("x-auth-token", token).send(_.pick(user, ["name", "email"]));
+
+  console.log("Token: ", token);
+  console.log("User ID: ", user._id);
+
+  res
+    .header("x-auth-token", token)
+    .header("x-user-id", user._id)
+    .send(_.pick(user, ["name", "email", "_id"]));
 });
 
 function validateRequest(req) {

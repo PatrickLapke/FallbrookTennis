@@ -3,10 +3,13 @@ import { TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import AppText from "./AppText";
 import colors from "../config/colors";
 
-function CourtDisplayText({ court, selectedCourt, setSelectedCourt }) {
+function CourtDisplayText({ court, selectedCourt, setSelectedCourt, isFirst }) {
+  const itemStyle = isFirst ? styles.first : {};
+
   return (
     <TouchableOpacity
       style={[
+        itemStyle,
         styles.container,
         selectedCourt && selectedCourt._id === court._id && styles.selected,
       ]}
@@ -39,6 +42,10 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   text: { padding: 15, fontSize: 21 },
+  first: {
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+  },
 });
 
 export default CourtDisplayText;

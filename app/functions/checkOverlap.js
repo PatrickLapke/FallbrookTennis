@@ -1,5 +1,4 @@
 function checkOverlap(startTime, endTime, bookings) {
-  console.log(`Checking overlap for ${startTime} to ${endTime}`);
   const start = new Date(startTime);
   const end = new Date(endTime);
 

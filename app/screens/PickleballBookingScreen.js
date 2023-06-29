@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
 import axios from "axios";
-import Screen from "../components/Screen";
+import { View, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import AppDateButton from "../components/AppDateButton";
 import AppPicker from "../components/AppPicker";
-import Toggle from "../components/Toggle";
 import AppDisplayBox from "../components/AppDisplayBox";
-import AppButton from "../components/AppButton";
-import CourtDisplayText from "../components/CourtDisplayText";
+import Screen from "../components/Screen";
 import { times } from "../components/times";
-import AppBoxButton from "../components/AppDateButton";
-import { computeTimes } from "../functions/computeTimes";
+import AppButtonRow from "../components/AppButtonRow";
+import CourtDisplayText from "../components/CourtDisplayText";
+import AppButton from "../components/AppButton";
+import { computePickleballTimes } from "../functions/computePickleballTimes";
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
-function TennisBooking() {
+function PickleballBookingScreen() {
+  const [selectedDate, setSelectedDate] = useState(null);
   const [time, setTime] = useState();
-  const [isSingles, setIsSingles] = useState(null);
-  const [courts, setCourts] = useState([]);
+  const [selectedHours, setSelectedHours] = useState(null);
   const [selectedCourt, setSelectedCourt] = useState(null);
-  const [selectedDate, setSelectedDate] = useState();
+  const [courts, setCourts] = useState([]);
 
   useEffect(() => {
     const fetchCourts = async () => {
-      if (time && selectedDate && isSingles !== null) {
+      if (time && selectedDate && selectedHours !== null) {
         try {
-          const { startTime, endTime } = computeTimes(
+          const { startTime, endTime } = computePickleballTimes(
             selectedDate,
             time,
-            isSingles
+            selectedHours
           );
-          //toISOString() converts this value to a string so in the backend, it needs to converted back to a date Object.
           const response = await axios.get(
-            `http://${IP_HOME}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+            `http://${IP_HOME}:3000/api/pickleballCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
           );
           setCourts(response.data);
         } catch (error) {
@@ -41,22 +40,23 @@ function TennisBooking() {
       }
     };
     fetchCourts();
-  }, [time, isSingles, selectedDate]);
+  }, [time, selectedHours, selectedDate]);
 
   const handlePost = async () => {
     try {
-      const { startTime, endTime } = computeTimes(
+      const { startTime, endTime } = computePickleballTimes(
         selectedDate,
         time,
-        isSingles
+        selectedHours
       );
+
       await axios.post(
-        //10.12.64.192
-        `http://${IP_HOME}:3000/api/tennisCourts/bookings`,
+        `http://${IP_HOME}:3000/api/pickleballCourts/bookings`,
         {
           startTime: startTime,
           endTime: endTime,
-          courtId: selectedCourt._id,
+          pickleballCourtId: selectedCourt._id,
+          userId: await AsyncStorage.getItem("user._id"),
         },
         {
           headers: {
@@ -73,25 +73,29 @@ function TennisBooking() {
   return (
     <Screen>
       <View style={styles.container}>
-        <AppBoxButton
+        <AppDateButton
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-        ></AppBoxButton>
+        ></AppDateButton>
         <AppPicker
           icon={"clock-outline"}
           items={times}
-          placeholder={"Select a start time"}
+          placeholder={"Select your start time..."}
           selectedItem={time}
           onSelectItem={(item) => setTime(item)}
         ></AppPicker>
-        <Toggle isSingles={isSingles} setIsSingles={setIsSingles}></Toggle>
+        <AppButtonRow
+          selectedHours={selectedHours}
+          setSelectedHours={setSelectedHours}
+        ></AppButtonRow>
         <AppDisplayBox marginTop={20} marginBottom={20}>
-          {courts.map((court) => (
+          {courts.map((pickleballCourt, index) => (
             <CourtDisplayText
-              key={court._id}
-              court={court}
+              key={pickleballCourt._id}
+              court={pickleballCourt}
               setSelectedCourt={setSelectedCourt}
               selectedCourt={selectedCourt}
+              isFirst={index == 0}
             ></CourtDisplayText>
           ))}
         </AppDisplayBox>
@@ -102,7 +106,7 @@ function TennisBooking() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, marginBottom: 10 },
+  container: { flex: 1 },
 });
 
-export default TennisBooking;
+export default PickleballBookingScreen;

@@ -1,6 +1,5 @@
 const auth = require("../middleware/auth");
 const { tennisCourt, validate } = require("../models/tennisCourt");
-const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const checkOverlap = require("../../app/functions/checkOverlap");

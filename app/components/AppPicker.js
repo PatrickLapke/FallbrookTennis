@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  TextInput,
-  View,
-  StyleSheet,
-  Modal,
-  Button,
-  FlatList,
-} from "react-native";
+import { View, StyleSheet, Modal, Button, FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import defaultStyles from "../config/styles";
