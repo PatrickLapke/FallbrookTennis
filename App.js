@@ -1,15 +1,33 @@
 import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import TennisBookingScreen from "./app/screens/TennisBookingScreen";
-import AppDisplayBox from "./app/components/AppDisplayBox";
-import LoginScreen from "./app/screens/LoginScreen";
-import AppBoxButton2 from "./app/components/AppDateButton";
 import RegisterScreen from "./app/screens/RegisterScreen";
-import AppPictureButton from "./app/components/AppPictureButton";
 import HomeScreen from "./app/screens/HomeScreen";
-import PickleballBookingScreen from "./app/screens/PickleballBookingScreen";
-import AppCircleButtons from "./app/components/AppButtonRow";
+
+const Stack = createNativeStackNavigator();
+
+const StackNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Register"
+      component={RegisterScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+);
 
 export default function App() {
-  return <PickleballBookingScreen></PickleballBookingScreen>;
+  return (
+    <NavigationContainer>
+      <StackNavigator></StackNavigator>
+    </NavigationContainer>
+  );
 }

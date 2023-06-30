@@ -19,7 +19,6 @@ app.listen(3000, () => {
 });
 
 const mongoose = require("mongoose");
-const { pickleballCourt } = require("./models/pickleballCourt");
 const connection_string = process.env.DATA_CONNECTION;
 const uri = connection_string;
 

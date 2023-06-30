@@ -1,11 +1,13 @@
 import React from "react";
-import { Image, KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 import axios from "axios";
-import { Platform } from "react-native";
+
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
+import colors from "../config/colors";
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
@@ -19,27 +21,25 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-function RegisterScreen() {
+function RegisterScreen({ navigation }) {
   const handleRegister = async (values) => {
     const { firstName, lastName, email, password } = values;
     try {
-      await axios.post(`http://${IP_SCHOOL}:3000/api/users`, {
+      await axios.post(`http://${IP_HOME}:3000/api/users`, {
         name: `${firstName} ${lastName}`,
         email: email,
         password: password,
       });
       console.log("New member registered successfully");
+      navigation.navigate("Home");
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
   return (
-    <Screen>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
+    <Screen style={styles.content}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.logoContainer}>
           <Image
             source={require("../assets/fallbrook-logo.png")}
@@ -104,17 +104,21 @@ function RegisterScreen() {
           />
           <SubmitButton title="Register" />
         </AppForm>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 7,
+  content: {
+    backgroundColor: colors.white,
   },
+  contentContainer: {
+    justifyContent: "flex-end",
+    flexGrow: 1,
+    marginBottom: 10,
+  },
+
   logoContainer: { alignItems: "center" },
   image: {
     marginBottom: 20,
