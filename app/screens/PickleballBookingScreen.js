@@ -12,6 +12,7 @@ import AppButtonRow from "../components/AppButtonRow";
 import CourtDisplayText from "../components/CourtDisplayText";
 import AppButton from "../components/AppButton";
 import { computePickleballTimes } from "../functions/computePickleballTimes";
+import colors from "../config/colors";
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 function PickleballBookingScreen() {
@@ -106,7 +107,7 @@ function PickleballBookingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: colors.white },
 });
 
 export default PickleballBookingScreen;

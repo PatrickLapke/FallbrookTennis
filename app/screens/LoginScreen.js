@@ -1,11 +1,13 @@
 import React from "react";
-import { Image, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import * as Yup from "yup";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
+import colors from "../config/colors";
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
@@ -13,7 +15,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(4).label("Password"),
 });
 
-function LoginScreen() {
+function LoginScreen({ navigation }) {
   const handleLogin = async (values) => {
     const { email, password } = values;
 
@@ -25,14 +27,22 @@ function LoginScreen() {
 
       await AsyncStorage.setItem("token", response.headers["x-auth-token"]);
       await AsyncStorage.setItem("user._id", response.headers["x-user-id"]);
+
+      navigation.navigate("Home");
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data) {
+        console.log(error.response.data);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
     }
   };
 
   return (
     <Screen style={styles.container}>
-      <KeyboardAvoidingView
+      <KeyboardAwareScrollView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
@@ -66,13 +76,14 @@ function LoginScreen() {
           />
           <SubmitButton title="Login" />
         </AppForm>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.white,
     flex: 1,
   },
   logo: {

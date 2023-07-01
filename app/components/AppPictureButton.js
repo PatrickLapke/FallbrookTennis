@@ -1,13 +1,12 @@
 import React from "react";
 import { ImageBackground, TouchableOpacity } from "react-native";
-import { View, StyleSheet } from "react-native";
-import Screen from "./Screen";
+import { StyleSheet } from "react-native";
 import AppText from "./AppText";
 import colors from "../config/colors";
 
-function AppBooking({ image, text }) {
+function AppBooking({ image, text, onPress }) {
   return (
-    <TouchableOpacity style={styles.button}>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
       <ImageBackground source={image} style={styles.imageBackground}>
         <AppText style={styles.text}>{text}</AppText>
       </ImageBackground>

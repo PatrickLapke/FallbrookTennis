@@ -5,7 +5,7 @@ import AppPictureButton from "../components/AppPictureButton";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   return (
     <Screen style={styles.container}>
       <View style={styles.imageContainer}>
@@ -18,10 +18,12 @@ function HomeScreen() {
         <AppPictureButton
           image={require("../assets/tennis2.png")}
           text={"Book a Tennis Court"}
+          onPress={() => navigation.navigate("TennisBooking")}
         ></AppPictureButton>
         <AppPictureButton
           image={require("../assets/pickleball2.png")}
           text={"Book a Pickleball Court"}
+          onPress={() => navigation.navigate("PickleballBooking")}
         ></AppPictureButton>
         <AppPictureButton
           image={require("../assets/proshop2.png")}

@@ -39,7 +39,7 @@ function AppBoxButton({ selectedDate, setSelectedDate }) {
   return (
     <View>
       <View style={styles.monthText}>
-        <AppText style={styles.text}>{month}/</AppText>
+        <AppText style={styles.text}>{month}</AppText>
       </View>
       <View style={styles.datesContainer}>
         {dates.map((date) => (
