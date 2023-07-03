@@ -8,6 +8,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import colors from "../config/colors";
+import AppLink from "../components/AppLink";
+import AppLinkText from "../components/AppLinkText";
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
@@ -75,6 +77,15 @@ function LoginScreen({ navigation }) {
             textContentType="password"
           />
           <SubmitButton title="Login" />
+          <AppLinkText
+            text={"Need an account?"}
+            linkText={"Register"}
+            onPress={() => navigation.navigate("Register")}
+          ></AppLinkText>
+          <AppLink
+            text={"Forgot Password?"}
+            onPress={() => navigation.navigate("Password-Reset")}
+          ></AppLink>
         </AppForm>
       </KeyboardAwareScrollView>
     </Screen>

@@ -2,7 +2,13 @@ const bcryptjs = require("bcryptjs");
 const _ = require("lodash");
 const express = require("express");
 
+let nanoid;
+import("nanoid").then((nano) => {
+  nanoid = nano.nanoid;
+});
+
 const sendVerification = require("../utility/sendVerification");
+const sendPasswordReset = require("../utility/sendPasswordReset");
 const { User, validateUser } = require("../models/user");
 const router = express.Router();
 
@@ -31,6 +37,52 @@ router.post("/", async (req, res) => {
   }
 
   res.header("x-auth-token", token).send(_.pick(user, ["name", "email"]));
+});
+
+router.post("/password-reset", async (req, res) => {
+  let user = await User.findOne({ email: req.body.email });
+  if (!user)
+    return res.status(400).send("There is no account with the provided email.");
+
+  user.passwordResetToken = nanoid(6);
+  await user.save();
+  res.status(200).send("Token saved.");
+
+  try {
+    await sendPasswordReset(user.email, user.passwordResetToken);
+    console.log("Reset token sent");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/password-reset/confirm", async (req, res) => {
+  console.log(req.body);
+  console.log(req.body.passwordResetToken);
+  let user = await User.findOne({
+    passwordResetToken: req.body.passwordResetToken,
+  });
+  if (!user) return res.status(400).send("The code you entered is incorrect.");
+  return res.status(200).send("Code Accepted.");
+});
+
+router.post("/change-password", async (req, res) => {
+  try {
+    let user = await User.findOne({
+      passwordResetToken: req.body.passwordResetToken,
+    });
+    if (!user)
+      return res.status(400).send("The code you entered is incorrect.");
+
+    const salt = await bcryptjs.genSalt(10);
+    user.password = await bcryptjs.hash(req.body.password, salt);
+    console.log(user.password);
+
+    await user.save();
+    res.status(200).send("Password Changed.");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

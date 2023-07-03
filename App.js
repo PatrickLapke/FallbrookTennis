@@ -7,6 +7,8 @@ import LoginScreen from "./app/screens/LoginScreen";
 import HomeScreen from "./app/screens/HomeScreen";
 import TennisBookingScreen from "./app/screens/TennisBookingScreen";
 import PickleballBookingScreen from "./app/screens/PickleballBookingScreen";
+import PasswordResetScreen from "./app/screens/PasswordResetScreen";
+import NewPasswordScreen from "./app/screens/NewPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +22,16 @@ const StackNavigator = () => (
     <Stack.Screen
       name="Register"
       component={RegisterScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Password-Reset"
+      component={PasswordResetScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="NewPasswordScreen"
+      component={NewPasswordScreen}
       options={{ headerShown: false }}
     />
     <Stack.Screen

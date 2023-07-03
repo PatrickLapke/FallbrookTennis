@@ -15,10 +15,9 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string().required().label("Last Name"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
-  confirmPassword: Yup.string().oneOf(
-    [Yup.ref("password")],
-    "Passwords must match"
-  ),
+  confirmPassword: Yup.string()
+    .required("Confirm password is a required field")
+    .oneOf([Yup.ref("password")], "Passwords must match"),
 });
 
 function RegisterScreen({ navigation }) {
@@ -118,7 +117,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginBottom: 10,
   },
-
   logoContainer: { alignItems: "center" },
   image: {
     marginBottom: 20,
