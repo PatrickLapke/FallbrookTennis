@@ -28,6 +28,7 @@ function HomeScreen({ navigation }) {
         <AppPictureButton
           image={require("../assets/proshop2.png")}
           text={"My Bookings"}
+          onPress={() => navigation.navigate("MyBookings")}
         ></AppPictureButton>
         <AppPictureButton
           image={require("../assets/overlook2.png")}

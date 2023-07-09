@@ -12,6 +12,7 @@ import CourtDisplayText from "../components/CourtDisplayText";
 import { times } from "../components/times";
 import AppBoxButton from "../components/AppDateButton";
 import { computeTimes } from "../functions/computeTimes";
+import colors from "../config/colors";
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 function TennisBooking() {
@@ -102,7 +103,7 @@ function TennisBooking() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, marginBottom: 10 },
+  container: { flex: 1, marginBottom: 10, backgroundColor: colors.white },
 });
 
 export default TennisBooking;

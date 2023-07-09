@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+
 import AppText from "./AppText";
 import colors from "../config/colors";
 
@@ -41,7 +42,10 @@ const styles = StyleSheet.create({
   selectedText: {
     color: colors.white,
   },
-  text: { padding: 15, fontSize: 21 },
+  text: {
+    padding: 15,
+    fontSize: 21,
+  },
   first: {
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,

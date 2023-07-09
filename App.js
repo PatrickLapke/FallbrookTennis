@@ -9,6 +9,7 @@ import TennisBookingScreen from "./app/screens/TennisBookingScreen";
 import PickleballBookingScreen from "./app/screens/PickleballBookingScreen";
 import PasswordResetScreen from "./app/screens/PasswordResetScreen";
 import NewPasswordScreen from "./app/screens/NewPasswordScreen";
+import MyBookingsScreen from "./app/screens/MyBookingsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,11 @@ const StackNavigator = () => (
     <Stack.Screen
       name="PickleballBooking"
       component={PickleballBookingScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="MyBookings"
+      component={MyBookingsScreen}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>
