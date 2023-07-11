@@ -24,7 +24,7 @@ function RegisterScreen({ navigation }) {
   const handleRegister = async (values) => {
     const { firstName, lastName, email, password } = values;
     try {
-      await axios.post(`http://${IP_HOME}:3000/api/users`, {
+      await axios.post(`http://${IP_SCHOOL}:3000/api/users`, {
         name: `${firstName} ${lastName}`,
         email: email,
         password: password,

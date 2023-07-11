@@ -8,18 +8,40 @@ import LottieView from "lottie-react-native";
 import CourtDisplayText from "../components/CourtDisplayText";
 import AppDisplayBox from "../components/AppDisplayBox";
 import AppMyBookingText from "../components/AppMyBookingText";
+import SuccessScreen from "./SuccessScreen";
+import Screen from "../components/Screen";
 import colors from "../config/colors";
+import AppText from "../components/AppText";
+import AppDelay from "../components/AppDelay";
 
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 function MyBookings() {
   const [isLoading, setIsLoading] = useState(false);
   const [pickleballCourts, setPickleballCourts] = useState([]);
+  const [tennisCourts, setTennisCourts] = useState([]);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const fetchTennisCourts = async () => {
+    try {
+      const response = await axios.get(
+        `http://${IP_SCHOOL}:3000/api/bookings/tennis`,
+        {
+          headers: {
+            "x-auth-token": await AsyncStorage.getItem("token"),
+          },
+        }
+      );
+      setTennisCourts(response.data);
+    } catch (error) {
+      console.log("Client side error hit: ", error.response.data);
+    }
+  };
 
   const fetchPickleballCourts = async () => {
     try {
       const response = await axios.get(
-        `http://${IP_HOME}:3000/api/bookings/pickleball`,
+        `http://${IP_SCHOOL}:3000/api/bookings/pickleball`,
         {
           headers: {
             "x-auth-token": await AsyncStorage.getItem("token"),
@@ -28,11 +50,12 @@ function MyBookings() {
       );
       setPickleballCourts(response.data);
     } catch (error) {
-      console.log("Client side error hit: ", error.response.data);
+      console.log("Client side error hit: ", error);
     }
   };
 
   useEffect(() => {
+    fetchTennisCourts();
     fetchPickleballCourts();
   }, []);
 
@@ -49,19 +72,25 @@ function MyBookings() {
           text: "Ok",
           onPress: async () => {
             setIsLoading(true);
-            console.log(isLoading);
+
             try {
               const response = await axios.delete(
-                `http://${IP_HOME}:3000/api/bookings/pickleball/${bookingId}`
+                `http://${IP_SCHOOL}:3000/api/bookings/pickleball/${bookingId}`
               );
-              fetchPickleballCourts();
+              if (response.status === 200) {
+                await fetchPickleballCourts();
+                await AppDelay(1000);
+                setIsLoading(false);
+                console.log("About to start");
+                setShowSuccess(true);
+                await AppDelay(1500);
+                setShowSuccess(false);
+                console.log("About to stop");
+              }
             } catch (error) {
-              console.log(error.response.data);
-            } finally {
-              // setTimeout(() => setIsLoading(false), 1000);
-              setIsLoading(false);
+              if (error.response) console.log(error.response);
+              else console.log(error);
             }
-            console.log(isLoading);
           },
         },
       ]
@@ -69,39 +98,67 @@ function MyBookings() {
   };
 
   return (
-    <View style={styles.container}>
-      <AppDisplayBox marginTop={20} marginBottom={20}>
-        {pickleballCourts.map((tennisCourt) => (
-          <CourtDisplayText
-            key={tennisCourt._id}
-            court={tennisCourt}
-          ></CourtDisplayText>
-        ))}
-      </AppDisplayBox>
-      <AppDisplayBox marginTop={20} marginBottom={20}>
-        {pickleballCourts.map((pickleballCourt) => (
-          <AppMyBookingText
-            key={pickleballCourt._id}
-            court={pickleballCourt}
-            onPress={deletePickleballCourt}
-          ></AppMyBookingText>
-        ))}
-      </AppDisplayBox>
-      {isLoading && (
-        <View style={styles.overlay}>
-          <LottieView
-            source={require("../../app/assets/bouncing_ball.json")}
-            autoPlay
-            loop
-          />
-        </View>
-      )}
-    </View>
+    <Screen>
+      {/* Start of Tennis box */}
+
+      <View style={styles.container}>
+        <AppDisplayBox
+          marginTop={10}
+          marginBottom={10}
+          header={"Tennis Bookings"}
+        >
+          {tennisCourts.length === 0 ? (
+            <View style={styles.noCourtText}>
+              <AppText>No Current Tennis Bookings</AppText>
+            </View>
+          ) : (
+            tennisCourts.map((tennisCourt) => (
+              <AppMyBookingText
+                key={tennisCourt._id}
+                court={tennisCourt}
+                onPress={() => console.log("Hello")}
+              ></AppMyBookingText>
+            ))
+          )}
+        </AppDisplayBox>
+        {/* Start of pickleball box */}
+
+        <AppDisplayBox
+          marginTop={10}
+          marginBottom={10}
+          header={"Pickleball Bookings"}
+        >
+          {pickleballCourts.length === 0 ? (
+            <View style={styles.noCourtText}>
+              <AppText>No Current Pickleball Bookings</AppText>
+            </View>
+          ) : (
+            pickleballCourts.map((pickleballCourt) => (
+              <AppMyBookingText
+                key={pickleballCourt._id}
+                court={pickleballCourt}
+                onPress={deletePickleballCourt}
+              ></AppMyBookingText>
+            ))
+          )}
+        </AppDisplayBox>
+        {isLoading && (
+          <View style={styles.overlay}>
+            <LottieView
+              source={require("../../app/assets/bouncing_ball.json")}
+              autoPlay
+              loop
+            />
+          </View>
+        )}
+        {showSuccess && <SuccessScreen visible={showSuccess} />}
+      </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: colors.white },
   overlay: {
     position: "absolute",
     top: 0,
@@ -112,6 +169,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,
+  },
+  header: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noCourtText: {
+    alignItems: "center",
+    marginTop: 30,
   },
 });
 

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bookingSchema = new mongoose.Schema({
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 const tennisCourt = new mongoose.model(

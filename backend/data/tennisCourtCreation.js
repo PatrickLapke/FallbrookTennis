@@ -22,5 +22,10 @@ const createCourt = async (name) => {
   }
 };
 
-// createCourt("Court 8");
-// createCourt("Court 9");
+createCourt("Court 1");
+createCourt("Court 2");
+createCourt("Court 3");
+createCourt("Court 4");
+createCourt("Court 5");
+createCourt("Court 6");
+createCourt("Court 7");
