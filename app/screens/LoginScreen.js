@@ -47,6 +47,7 @@ function LoginScreen({ navigation }) {
       <KeyboardAwareScrollView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
+        // keyboardShouldPersistTaps="always"
       >
         <Image
           style={styles.logo}

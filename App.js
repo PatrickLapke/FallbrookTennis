@@ -10,6 +10,7 @@ import PickleballBookingScreen from "./app/screens/PickleballBookingScreen";
 import PasswordResetScreen from "./app/screens/PasswordResetScreen";
 import NewPasswordScreen from "./app/screens/NewPasswordScreen";
 import MyBookingsScreen from "./app/screens/MyBookingsScreen";
+import AppTextInput from "./app/components/AppTextInput";
 
 const Stack = createNativeStackNavigator();
 
