@@ -7,7 +7,10 @@ import {
   fetchBookedPickleballCourts,
   deletePickleballCourt,
 } from "../API/pickleballCourts";
-import fetchBookedTennisCourts from "../API/tennisCourts";
+import {
+  fetchTennisBookings,
+  deleteTennisCourtBooking,
+} from "../API/tennisCourts";
 import AppDisplayBox from "../components/AppDisplayBox";
 import AppMyBookingText from "../components/AppMyBookingText";
 import SuccessScreen from "./SuccessScreen";
@@ -23,9 +26,9 @@ function MyBookings() {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const fetchData = async () => {
-    const bookedTennisCourts = await fetchBookedTennisCourts();
+    const tennisBookings = await fetchTennisBookings();
     const bookedPickleballCourts = await fetchBookedPickleballCourts();
-    setTennisCourts(bookedTennisCourts);
+    setTennisCourts(tennisBookings);
     setPickleballCourts(bookedPickleballCourts);
   };
 
@@ -53,7 +56,37 @@ function MyBookings() {
               <AppMyBookingText
                 key={tennisCourt._id}
                 court={tennisCourt}
-                onPress={() => console.log("Hello")}
+                onPress={async (bookingId) => {
+                  Alert.alert(
+                    "Are you sure you want to delete this booking?",
+                    "This is a message",
+                    [
+                      {
+                        text: "Cancel",
+                        style: "cancel",
+                      },
+                      {
+                        text: "Ok",
+                        onPress: async () => {
+                          setIsLoading(true);
+                          const result = await deleteTennisCourtBooking(
+                            bookingId
+                          );
+                          if (result) {
+                            await fetchData();
+                            await AppDelay(1000);
+                            setIsLoading(false);
+                            setShowSuccess(true);
+                            await AppDelay(1500);
+                            setShowSuccess(false);
+                          } else {
+                            console.log("HHHHHEEEEEELLLPPPP");
+                          }
+                        },
+                      },
+                    ]
+                  );
+                }}
               ></AppMyBookingText>
             ))
           )}

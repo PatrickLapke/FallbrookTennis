@@ -66,4 +66,18 @@ router.delete("/pickleball/:bookingId", async (req, res) => {
   return res.status(200).send("Booking successfully deleted.");
 });
 
+router.delete("/tennis/:bookingId", async (req, res) => {
+  const bookingId = req.params.bookingId;
+  const court = await tennisCourt.findOne({ "bookings._id": bookingId });
+  if (!court) {
+    return res.status(404).send("Booking not found.");
+  }
+
+  const booking = court.bookings.id(bookingId);
+
+  booking.deleteOne();
+
+  await court.save();
+  return res.status(200).send("Booking successfully deleted.");
+});
 module.exports = router;
