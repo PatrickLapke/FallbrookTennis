@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { View, StyleSheet } from "react-native";
+import { Alert, View, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import AppDateButton from "../components/AppDateButton";
@@ -21,6 +21,21 @@ function PickleballBookingScreen() {
   const [selectedHours, setSelectedHours] = useState(null);
   const [selectedCourt, setSelectedCourt] = useState(null);
   const [courts, setCourts] = useState([]);
+  const [noCourtsMessage, setNoCourtsMessage] = useState();
+  const [firstSelectionsMade, setFirstSelectionsMade] = useState(false);
+  const [allSelectionsMade, setAllSelectionsMade] = useState(false);
+
+  const checkFirstSelections = () => {
+    if (selectedDate && time && selectedHours !== null) {
+      setFirstSelectionsMade(true);
+    } else setFirstSelectionsMade(false);
+  };
+
+  const checkAllSelections = () => {
+    if (selectedDate && time && selectedHours && selectedCourt !== null) {
+      setAllSelectionsMade(true);
+    } else setAllSelectionsMade(false);
+  };
 
   useEffect(() => {
     const fetchCourts = async () => {
@@ -34,14 +49,30 @@ function PickleballBookingScreen() {
           const response = await axios.get(
             `http://${IP_HOME}:3000/api/pickleballCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
           );
-          setCourts(response.data);
+          if (Array.isArray(response.data) && response.data.length > 0) {
+            setCourts(response.data);
+            setNoCourtsMessage("");
+          } else {
+            setCourts([]);
+            setNoCourtsMessage(response.data);
+          }
         } catch (error) {
           console.log(error);
         }
       }
     };
     fetchCourts();
-  }, [time, selectedHours, selectedDate]);
+    checkFirstSelections();
+    checkAllSelections();
+  }, [time, selectedHours, selectedDate, selectedCourt]);
+
+  const handleAlert = () => {
+    Alert.alert(
+      "Incomplete Selections",
+      "Please select the date, time, hours of reservation, and a court to proceed.",
+      [{ text: "Ok" }]
+    );
+  };
 
   const handlePost = async () => {
     try {
@@ -89,7 +120,17 @@ function PickleballBookingScreen() {
           selectedHours={selectedHours}
           setSelectedHours={setSelectedHours}
         ></AppButtonRow>
-        <AppDisplayBox marginTop={20} marginBottom={20}>
+        <AppDisplayBox
+          marginTop={20}
+          marginBottom={20}
+          text={
+            firstSelectionsMade
+              ? courts.length === 0
+                ? noCourtsMessage
+                : null
+              : "Please select the date, start time, and number of hours to display the available courts here."
+          }
+        >
           {courts.map((pickleballCourt, index) => (
             <CourtDisplayText
               key={pickleballCourt._id}
@@ -100,7 +141,12 @@ function PickleballBookingScreen() {
             ></CourtDisplayText>
           ))}
         </AppDisplayBox>
-        <AppButton title={"Book Now"} color="primary" onPress={handlePost} />
+        <AppButton
+          title={"Book Now"}
+          color={allSelectionsMade ? "primary" : "light"}
+          onPress={allSelectionsMade ? handlePost : handleAlert}
+          textColor={allSelectionsMade ? "white" : "black"}
+        />
       </View>
     </Screen>
   );

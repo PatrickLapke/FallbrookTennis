@@ -11,7 +11,11 @@ router.get("/", async (req, res) => {
     const availableCourts = pickleballCourts.filter((pickleballCourt) => {
       return !checkOverlap(startTime, endTime, pickleballCourt.bookings);
     });
-    res.send(availableCourts);
+    if (availableCourts.length === 0) {
+      return res
+        .status(200)
+        .json("No courts available at the selected date and time.");
+    } else res.send(availableCourts);
   } catch (error) {
     console.log(error);
   }
