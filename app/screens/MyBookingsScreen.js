@@ -1,11 +1,13 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
 import LottieView from "lottie-react-native";
+import { Alert } from "react-native";
 
-import CourtDisplayText from "../components/CourtDisplayText";
+import {
+  fetchBookedPickleballCourts,
+  deletePickleballCourt,
+} from "../API/pickleballCourts";
+import fetchBookedTennisCourts from "../API/tennisCourts";
 import AppDisplayBox from "../components/AppDisplayBox";
 import AppMyBookingText from "../components/AppMyBookingText";
 import SuccessScreen from "./SuccessScreen";
@@ -14,88 +16,23 @@ import colors from "../config/colors";
 import AppText from "../components/AppText";
 import AppDelay from "../components/AppDelay";
 
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
-
 function MyBookings() {
   const [isLoading, setIsLoading] = useState(false);
   const [pickleballCourts, setPickleballCourts] = useState([]);
   const [tennisCourts, setTennisCourts] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const fetchTennisCourts = async () => {
-    try {
-      const response = await axios.get(
-        `http://${IP_SCHOOL}:3000/api/bookings/tennis`,
-        {
-          headers: {
-            "x-auth-token": await AsyncStorage.getItem("token"),
-          },
-        }
-      );
-      setTennisCourts(response.data);
-    } catch (error) {
-      console.log("Client side error hit: ", error.response.data);
-    }
-  };
-
-  const fetchPickleballCourts = async () => {
-    try {
-      const response = await axios.get(
-        `http://${IP_SCHOOL}:3000/api/bookings/pickleball`,
-        {
-          headers: {
-            "x-auth-token": await AsyncStorage.getItem("token"),
-          },
-        }
-      );
-      setPickleballCourts(response.data);
-    } catch (error) {
-      console.log("Client side error hit: ", error);
-    }
+  const fetchData = async () => {
+    const bookedTennisCourts = await fetchBookedTennisCourts();
+    const bookedPickleballCourts = await fetchBookedPickleballCourts();
+    setTennisCourts(bookedTennisCourts);
+    setPickleballCourts(bookedPickleballCourts);
   };
 
   useEffect(() => {
-    fetchTennisCourts();
-    fetchPickleballCourts();
-  }, []);
-
-  const deletePickleballCourt = async (bookingId) => {
-    Alert.alert(
-      "Are you sure you want to delete this booking?",
-      "This is a message",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Ok",
-          onPress: async () => {
-            setIsLoading(true);
-
-            try {
-              const response = await axios.delete(
-                `http://${IP_SCHOOL}:3000/api/bookings/pickleball/${bookingId}`
-              );
-              if (response.status === 200) {
-                await fetchPickleballCourts();
-                await AppDelay(1000);
-                setIsLoading(false);
-                console.log("About to start");
-                setShowSuccess(true);
-                await AppDelay(1500);
-                setShowSuccess(false);
-                console.log("About to stop");
-              }
-            } catch (error) {
-              if (error.response) console.log(error.response);
-              else console.log(error);
-            }
-          },
-        },
-      ]
-    );
-  };
+    console.log("The value of showSuccess is now: ", showSuccess);
+    fetchData();
+  }, [showSuccess]);
 
   return (
     <Screen>
@@ -137,7 +74,35 @@ function MyBookings() {
               <AppMyBookingText
                 key={pickleballCourt._id}
                 court={pickleballCourt}
-                onPress={deletePickleballCourt}
+                onPress={async (bookingId) => {
+                  Alert.alert(
+                    "Are you sure you want to delete this booking?",
+                    "This is a message",
+                    [
+                      {
+                        text: "Cancel",
+                        style: "cancel",
+                      },
+                      {
+                        text: "Ok",
+                        onPress: async () => {
+                          setIsLoading(true);
+                          const result = await deletePickleballCourt(bookingId);
+                          if (result) {
+                            await fetchData();
+                            await AppDelay(1000);
+                            setIsLoading(false);
+                            setShowSuccess(true);
+                            await AppDelay(1500);
+                            setShowSuccess(false);
+                          } else {
+                            console.log("HHHHHEEEEEELLLPPPP");
+                          }
+                        },
+                      },
+                    ]
+                  );
+                }}
               ></AppMyBookingText>
             ))
           )}
@@ -151,8 +116,8 @@ function MyBookings() {
             />
           </View>
         )}
-        {showSuccess && <SuccessScreen visible={showSuccess} />}
       </View>
+      {showSuccess && <SuccessScreen visible={showSuccess} />}
     </Screen>
   );
 }

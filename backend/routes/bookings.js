@@ -32,7 +32,6 @@ router.get("/pickleball", async (req, res) => {
 router.get("/tennis", async (req, res) => {
   try {
     const token = req.header("x-auth-token");
-    console.log(token);
     if (!token)
       return res.status(401).send("Access denied. No token provided.");
 
@@ -51,6 +50,7 @@ router.get("/tennis", async (req, res) => {
     return res.status(500).send("There was a server error.");
   }
 });
+
 router.delete("/pickleball/:bookingId", async (req, res) => {
   const bookingId = req.params.bookingId;
   const court = await pickleballCourt.findOne({ "bookings._id": bookingId });
@@ -59,7 +59,6 @@ router.delete("/pickleball/:bookingId", async (req, res) => {
   }
 
   const booking = court.bookings.id(bookingId);
-  console.log(booking);
 
   booking.deleteOne();
 
