@@ -6,7 +6,7 @@ const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 const fetchBookedPickleballCourts = async () => {
   try {
     const response = await axios.get(
-      `http://${IP_SCHOOL}:3000/api/bookings/pickleball`,
+      `http://${IP_HOME}:3000/api/bookings/pickleball`,
       {
         headers: {
           "x-auth-token": await AsyncStorage.getItem("token"),
@@ -23,7 +23,7 @@ const fetchBookedPickleballCourts = async () => {
 const deletePickleballCourt = async (bookingId) => {
   try {
     const response = await axios.delete(
-      `http://${IP_SCHOOL}:3000/api/bookings/pickleball/${bookingId}`
+      `http://${IP_HOME}:3000/api/bookings/pickleball/${bookingId}`
     );
     if (response.status === 200) {
       return response.data;

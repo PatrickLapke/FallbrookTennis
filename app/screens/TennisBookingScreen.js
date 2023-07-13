@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import axios from "axios";
 import Screen from "../components/Screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +21,21 @@ function TennisBooking() {
   const [courts, setCourts] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState(null);
   const [selectedDate, setSelectedDate] = useState();
+  const [firstSelectionsMade, setFirstSelectionsMade] = useState(false);
+  const [allSelectionsMade, setAllSelectionsMade] = useState(false);
+  const [noCourtsMessage, setNoCourtsMessage] = useState();
+
+  const checkFirstSelections = () => {
+    if (selectedDate && time && isSingles !== null) {
+      setFirstSelectionsMade(true);
+    } else setFirstSelectionsMade(false);
+  };
+
+  const checkAllSelections = () => {
+    if (selectedDate && time && isSingles && selectedCourt !== null) {
+      setAllSelectionsMade(true);
+    } else setAllSelectionsMade(false);
+  };
 
   useEffect(() => {
     const fetchCourts = async () => {
@@ -33,16 +48,32 @@ function TennisBooking() {
           );
           //toISOString() converts this value to a string so in the backend, it needs to converted back to a date Object.
           const response = await axios.get(
-            `http://${IP_SCHOOL}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+            `http://${IP_HOME}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
           );
-          setCourts(response.data);
+          if (Array.isArray(response.data) && response.data.length > 0) {
+            setCourts(response.data);
+            setNoCourtsMessage("");
+          } else {
+            setCourts([]);
+            setNoCourtsMessage(response.data);
+          }
         } catch (error) {
           console.log(error);
         }
       }
     };
     fetchCourts();
-  }, [time, isSingles, selectedDate]);
+    checkFirstSelections();
+    checkAllSelections();
+  }, [time, isSingles, selectedDate, selectedCourt]);
+
+  const handleAlert = () => {
+    Alert.alert(
+      "Incomplete Selections",
+      "Please select the date, time, singles or doubles, and a court to proceed.",
+      [{ text: "Ok" }]
+    );
+  };
 
   const handlePost = async () => {
     try {
@@ -51,8 +82,8 @@ function TennisBooking() {
         time,
         isSingles
       );
+
       await axios.post(
-        //10.12.64.192
         `http://${IP_HOME}:3000/api/tennisCourts/bookings`,
         {
           startTime: startTime,
@@ -68,6 +99,7 @@ function TennisBooking() {
       );
       console.log("Booking added successfully");
     } catch (error) {
+      console.log("Some error hit on the handlePost for tennis");
       console.log(error);
     }
   };
@@ -87,7 +119,17 @@ function TennisBooking() {
           onSelectItem={(item) => setTime(item)}
         ></AppPicker>
         <Toggle isSingles={isSingles} setIsSingles={setIsSingles}></Toggle>
-        <AppDisplayBox marginTop={20} marginBottom={20}>
+        <AppDisplayBox
+          marginTop={20}
+          marginBottom={20}
+          text={
+            firstSelectionsMade
+              ? courts.length === 0
+                ? noCourtsMessage
+                : null
+              : "Please select the date, start time, and singles or doubles to display the available courts here."
+          }
+        >
           {courts.map((court) => (
             <CourtDisplayText
               key={court._id}
@@ -97,7 +139,12 @@ function TennisBooking() {
             ></CourtDisplayText>
           ))}
         </AppDisplayBox>
-        <AppButton title={"Book Now"} color="primary" onPress={handlePost} />
+        <AppButton
+          title={"Book Now"}
+          color={allSelectionsMade ? "primary" : "light"}
+          onPress={allSelectionsMade ? handlePost : handleAlert}
+          textColor={allSelectionsMade ? "white" : "black"}
+        />
       </View>
     </Screen>
   );

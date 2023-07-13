@@ -32,7 +32,7 @@ function PickleballBookingScreen() {
             selectedHours
           );
           const response = await axios.get(
-            `http://${IP_SCHOOL}:3000/api/pickleballCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+            `http://${IP_HOME}:3000/api/pickleballCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
           );
           setCourts(response.data);
         } catch (error) {
@@ -52,7 +52,7 @@ function PickleballBookingScreen() {
       );
 
       await axios.post(
-        `http://${IP_SCHOOL}:3000/api/pickleballCourts/bookings`,
+        `http://${IP_HOME}:3000/api/pickleballCourts/bookings`,
         {
           startTime: startTime,
           endTime: endTime,

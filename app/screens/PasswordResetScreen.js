@@ -18,7 +18,7 @@ function PasswordResetScreen({ navigation }) {
     const { email } = values;
     try {
       const response = await axios.post(
-        `http://${IP_SCHOOL}:3000/api/users/password-reset`,
+        `http://${IP_HOME}:3000/api/users/password-reset`,
         {
           email: email,
         }
@@ -36,7 +36,7 @@ function PasswordResetScreen({ navigation }) {
     console.log(passwordResetToken);
     try {
       const response = await axios.post(
-        `http://${IP_SCHOOL}:3000/api/users/password-reset/confirm`,
+        `http://${IP_HOME}:3000/api/users/password-reset/confirm`,
         { passwordResetToken: passwordResetToken }
       );
       if (response.status === 200) {
