@@ -59,9 +59,7 @@ function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   image: {
     height: 100,
     resizeMode: "contain",

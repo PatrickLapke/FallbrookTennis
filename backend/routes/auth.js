@@ -12,8 +12,6 @@ router.post("/", async (req, res) => {
 
     let user = await User.findOne({ email: req.body.email });
 
-    console.log(user.password);
-    console.log(req.body.password);
     if (!user) return res.status(400).send("Invalid email or password.");
 
     const validPassword = await bcryptjs.compare(
@@ -24,9 +22,6 @@ router.post("/", async (req, res) => {
       return res.status(400).send("Invalid email or password.");
 
     const token = user.generateAuthToken();
-
-    console.log("Token: ", token);
-    console.log("User ID: ", user._id);
 
     res
       .header("x-auth-token", token)
