@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 import axios from "axios";
-
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import SuccessScreen from "./SuccessScreen";
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import colors from "../config/colors";
+import AppDelay from "../components/AppDelay";
+
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
@@ -21,18 +23,26 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen({ navigation }) {
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const handleRegister = async (values) => {
     const { firstName, lastName, email, password } = values;
     try {
-      await axios.post(`http://${IP_HOME}:3000/api/users`, {
+      const response = await axios.post(`http://${IP_HOME}:3000/api/users`, {
         name: `${firstName} ${lastName}`,
         email: email,
         password: password,
       });
-      console.log("New member registered successfully");
-      navigation.navigate("Home");
+
+      if (response.status === 201) {
+        console.log("New member registered successfully");
+        setShowSuccess(true);
+        await AppDelay(1500);
+        setShowSuccess(false);
+        navigation.navigate("Home");
+      }
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
     }
   };
 
@@ -104,6 +114,7 @@ function RegisterScreen({ navigation }) {
           <SubmitButton title="Register" />
         </AppForm>
       </KeyboardAwareScrollView>
+      {showSuccess && <SuccessScreen visible={showSuccess} loop />}
     </Screen>
   );
 }

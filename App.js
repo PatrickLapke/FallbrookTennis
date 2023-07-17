@@ -11,6 +11,7 @@ import PasswordResetScreen from "./app/screens/PasswordResetScreen";
 import NewPasswordScreen from "./app/screens/NewPasswordScreen";
 import MyBookingsScreen from "./app/screens/MyBookingsScreen";
 import AppTextInput from "./app/components/AppTextInput";
+import AppMenuButton from "./app/components/AppMenuButton";
 
 const Stack = createNativeStackNavigator();
 

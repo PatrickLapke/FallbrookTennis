@@ -34,7 +34,7 @@ router.post("/bookings", auth, async (req, res) => {
     court.bookings.push({ startTime, endTime, userId });
 
     await court.save();
-    res.status(200).send("Booking added to court.");
+    res.status(201).send("Booking added to court.");
   } catch (error) {
     console.log("Some error in the backend for posting a tennis court");
     console.log(error);

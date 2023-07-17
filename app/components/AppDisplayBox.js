@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 1,
   },
-  header: { fontSize: 24 },
+  header: { fontSize: 24, fontWeight: 800 },
   headerContainer: {
     alignItems: "center",
     marginBottom: 7,

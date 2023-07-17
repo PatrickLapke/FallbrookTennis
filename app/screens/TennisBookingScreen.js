@@ -13,9 +13,12 @@ import { times } from "../components/times";
 import AppBoxButton from "../components/AppDateButton";
 import { computeTimes } from "../functions/computeTimes";
 import colors from "../config/colors";
+import SuccessScreen from "../screens/SuccessScreen";
+import AppDelay from "../components/AppDelay";
+
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
-function TennisBooking() {
+function TennisBooking({ navigation }) {
   const [time, setTime] = useState();
   const [isSingles, setIsSingles] = useState(null);
   const [courts, setCourts] = useState([]);
@@ -24,6 +27,7 @@ function TennisBooking() {
   const [firstSelectionsMade, setFirstSelectionsMade] = useState(false);
   const [allSelectionsMade, setAllSelectionsMade] = useState(false);
   const [noCourtsMessage, setNoCourtsMessage] = useState();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const checkFirstSelections = () => {
     if (selectedDate && time && isSingles !== null) {
@@ -83,7 +87,7 @@ function TennisBooking() {
         isSingles
       );
 
-      await axios.post(
+      const response = await axios.post(
         `http://${IP_HOME}:3000/api/tennisCourts/bookings`,
         {
           startTime: startTime,
@@ -97,7 +101,14 @@ function TennisBooking() {
           },
         }
       );
-      console.log("Booking added successfully");
+
+      if (response.status === 201) {
+        setShowSuccess(true);
+        await AppDelay(1500);
+        setShowSuccess(false);
+        console.log("Booking added successfully");
+        navigation.navigate("Home");
+      }
     } catch (error) {
       console.log("Some error hit on the handlePost for tennis");
       console.log(error);
@@ -127,7 +138,7 @@ function TennisBooking() {
               ? courts.length === 0
                 ? noCourtsMessage
                 : null
-              : "Please select the date, start time, and singles or doubles to display the available courts here."
+              : "Please select the date, start time, and singles or doubles to display the available courts here. Please note that singles is 60 minutes play time, and doubles is 90 minutes play time."
           }
         >
           {courts.map((court) => (
@@ -146,6 +157,7 @@ function TennisBooking() {
           textColor={allSelectionsMade ? "white" : "black"}
         />
       </View>
+      {showSuccess && <SuccessScreen visible={showSuccess} />}
     </Screen>
   );
 }

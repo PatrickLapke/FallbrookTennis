@@ -36,7 +36,10 @@ router.post("/", async (req, res) => {
     console.log(error);
   }
 
-  res.header("x-auth-token", token).send(_.pick(user, ["name", "email"]));
+  res
+    .status(201)
+    .header("x-auth-token", token)
+    .send(_.pick(user, ["name", "email"]));
 });
 
 router.post("/password-reset", async (req, res) => {

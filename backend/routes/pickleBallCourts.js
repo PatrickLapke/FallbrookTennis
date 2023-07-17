@@ -30,7 +30,7 @@ router.post("/bookings", auth, async (req, res) => {
     court.bookings.push({ startTime, endTime, userId });
 
     await court.save();
-    res.status(200).send("Booking added to pickleballCourt.");
+    res.status(201).send("Booking added to pickleballCourt.");
   } catch (error) {
     console.log(error);
   }

@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
 import AppPictureButton from "../components/AppPictureButton";
-import Screen from "../components/Screen";
+import AppMenuButton from "../components/AppMenuButton";
+import AppMenuModal from "../components/AppMenuModal";
 import colors from "../config/colors";
+import Screen from "../components/Screen";
 
 function HomeScreen({ navigation }) {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <Screen style={styles.container}>
       <View style={styles.imageContainer}>
@@ -13,7 +17,22 @@ function HomeScreen({ navigation }) {
           source={require("../assets/logo.png")}
           style={styles.image}
         ></Image>
+
+        <View style={styles.menuIcon}>
+          <AppMenuButton
+            onPress={() => setModalVisible(!modalVisible)}
+          ></AppMenuButton>
+          {modalVisible && (
+            <View style={styles.modalContainer}>
+              <AppMenuModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(!modalVisible)}
+              ></AppMenuModal>
+            </View>
+          )}
+        </View>
       </View>
+
       <View style={styles.images}>
         <AppPictureButton
           image={require("../assets/tennis2.png")}
@@ -45,19 +64,25 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 100,
-    width: 100,
     resizeMode: "contain",
+    width: 100,
+  },
+  imageContainer: {
+    alignItems: "center",
+    backgroundColor: colors.black,
+    height: 130,
+    justifyContent: "center",
+    position: "relative",
+    width: "100%",
   },
   images: {
     flex: 1,
     justifyContent: "space-evenly",
   },
-  imageContainer: {
-    backgroundColor: colors.black,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 130,
+  menuIcon: {
+    left: 20,
+    position: "absolute",
+    top: 20,
   },
 });
 

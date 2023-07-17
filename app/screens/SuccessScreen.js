@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Modal } from "react-native";
 import LottieView from "lottie-react-native";
 
-function SuccessScreen({ visible = false }) {
+function SuccessScreen({ visible = false, loop = false }) {
   if (!visible) return null;
 
   return (
@@ -12,7 +12,7 @@ function SuccessScreen({ visible = false }) {
           <LottieView
             source={require("../assets/success.json")}
             autoPlay
-            loop
+            loop={loop}
             resizeMode="cover"
           />
         </View>

@@ -13,9 +13,12 @@ import CourtDisplayText from "../components/CourtDisplayText";
 import AppButton from "../components/AppButton";
 import { computePickleballTimes } from "../functions/computePickleballTimes";
 import colors from "../config/colors";
+import SuccessScreen from "./SuccessScreen";
+import AppDelay from "../components/AppDelay";
+
 const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
 
-function PickleballBookingScreen() {
+function PickleballBookingScreen({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [time, setTime] = useState();
   const [selectedHours, setSelectedHours] = useState(null);
@@ -24,6 +27,7 @@ function PickleballBookingScreen() {
   const [noCourtsMessage, setNoCourtsMessage] = useState();
   const [firstSelectionsMade, setFirstSelectionsMade] = useState(false);
   const [allSelectionsMade, setAllSelectionsMade] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const checkFirstSelections = () => {
     if (selectedDate && time && selectedHours !== null) {
@@ -82,7 +86,7 @@ function PickleballBookingScreen() {
         selectedHours
       );
 
-      await axios.post(
+      const response = await axios.post(
         `http://${IP_HOME}:3000/api/pickleballCourts/bookings`,
         {
           startTime: startTime,
@@ -96,6 +100,11 @@ function PickleballBookingScreen() {
           },
         }
       );
+      if (response.status === 201) {
+        setShowSuccess(true);
+        await AppDelay(1500);
+        navigation.navigate("Home");
+      }
       console.log("Booking added successfully");
     } catch (error) {
       console.log(error);
@@ -148,6 +157,7 @@ function PickleballBookingScreen() {
           textColor={allSelectionsMade ? "white" : "black"}
         />
       </View>
+      {showSuccess && <SuccessScreen visible={showSuccess} />}
     </Screen>
   );
 }
