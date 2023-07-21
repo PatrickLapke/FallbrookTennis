@@ -1,5 +1,6 @@
 const auth = require("../middleware/auth");
 const { pickleballCourt, validate } = require("../models/pickleballCourt");
+const emailVerification = require("../middleware/emailVerification");
 const express = require("express");
 const router = express.Router();
 const checkOverlap = require("../../app/functions/checkOverlap");
@@ -24,7 +25,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/bookings", auth, async (req, res) => {
+router.post("/bookings", auth, emailVerification, async (req, res) => {
+  console.log("hit");
   const { startTime, endTime, pickleballCourtId, userId } = req.body;
   try {
     const court = await pickleballCourt.findById(pickleballCourtId);

@@ -7,8 +7,6 @@ const API_KEY = process.env.SENDGRID_API;
 sgMail.setApiKey(API_KEY);
 
 async function sendVerification(email, token) {
-  console.log(token);
-
   const msg = {
     to: email,
     from: {

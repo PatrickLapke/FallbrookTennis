@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import axios from "axios";
 import Screen from "../components/Screen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import AppPicker from "../components/AppPicker";
 import Toggle from "../components/Toggle";
@@ -11,12 +9,14 @@ import AppButton from "../components/AppButton";
 import CourtDisplayText from "../components/CourtDisplayText";
 import { times } from "../components/times";
 import AppBoxButton from "../components/AppDateButton";
-import { computeTimes } from "../functions/computeTimes";
 import colors from "../config/colors";
 import SuccessScreen from "../screens/SuccessScreen";
 import AppDelay from "../components/AppDelay";
-
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+import {
+  fetchAvailableTennisCourts,
+  handleTennisBook,
+} from "../API/tennisCourts";
+import { resendVerificationEmail } from "../API/users";
 
 function TennisBooking({ navigation }) {
   const [time, setTime] = useState();
@@ -28,6 +28,7 @@ function TennisBooking({ navigation }) {
   const [allSelectionsMade, setAllSelectionsMade] = useState(false);
   const [noCourtsMessage, setNoCourtsMessage] = useState();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState();
 
   const checkFirstSelections = () => {
     if (selectedDate && time && isSingles !== null) {
@@ -42,31 +43,43 @@ function TennisBooking({ navigation }) {
   };
 
   useEffect(() => {
-    const fetchCourts = async () => {
+    if (errorMsg) {
+      Alert.alert("Error", errorMsg, [
+        { text: "Back", onPress: () => setErrorMsg("") },
+        {
+          text: "Resend Email",
+          onPress: () => {
+            resendEmail(), setErrorMsg("");
+          },
+        },
+      ]);
+      setErrorMsg("");
+    }
+  });
+
+  useEffect(() => {
+    const getCourts = async () => {
       if (time && selectedDate && isSingles !== null) {
         try {
-          const { startTime, endTime } = computeTimes(
+          const courts = await fetchAvailableTennisCourts(
             selectedDate,
             time,
             isSingles
           );
-          //toISOString() converts this value to a string so in the backend, it needs to converted back to a date Object.
-          const response = await axios.get(
-            `http://${IP_SCHOOL}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
-          );
-          if (Array.isArray(response.data) && response.data.length > 0) {
-            setCourts(response.data);
+
+          if (Array.isArray(courts) && courts.length > 0) {
+            setCourts(courts);
             setNoCourtsMessage("");
           } else {
             setCourts([]);
-            setNoCourtsMessage(response.data);
+            setNoCourtsMessage(courts);
           }
         } catch (error) {
           console.log(error);
         }
       }
     };
-    fetchCourts();
+    getCourts();
     checkFirstSelections();
     checkAllSelections();
   }, [time, isSingles, selectedDate, selectedCourt]);
@@ -81,37 +94,48 @@ function TennisBooking({ navigation }) {
 
   const handlePost = async () => {
     try {
-      const { startTime, endTime } = computeTimes(
+      const response = await handleTennisBook(
         selectedDate,
         time,
-        isSingles
-      );
-      // console.log(startTime, endTime);
-      const response = await axios.post(
-        `http://${IP_SCHOOL}:3000/api/tennisCourts/bookings`,
-        {
-          startTime: startTime,
-          endTime: endTime,
-          courtId: selectedCourt._id,
-          userId: await AsyncStorage.getItem("user._id"),
-        },
-        {
-          headers: {
-            "x-auth-token": await AsyncStorage.getItem("token"),
-          },
-        }
+        isSingles,
+        selectedCourt
       );
 
       if (response.status === 201) {
         setShowSuccess(true);
         await AppDelay(1500);
         setShowSuccess(false);
-        console.log("Booking added successfully");
         navigation.navigate("Home");
       }
     } catch (error) {
       console.log("Some error hit on the handlePost for tennis");
-      console.log(error);
+
+      console.log(error.response.data);
+      if (error.response.status === 401) {
+        setErrorMsg(error.response.data);
+      }
+    }
+  };
+
+  const resendEmail = async () => {
+    try {
+      const response = await resendVerificationEmail();
+
+      if (response.status === 200) {
+        Alert.alert(
+          "Email Sent",
+          "A verification email has been sent to your address.",
+          [{ text: "OK" }]
+        );
+      }
+    } catch (error) {
+      console.log("Error sending verification email:", error);
+      // console.log(error.response.data);
+      Alert.alert(
+        "Error",
+        "An error occurred while sending the verification email. Please try again.",
+        [{ text: "OK" }]
+      );
     }
   };
 

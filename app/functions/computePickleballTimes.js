@@ -20,6 +20,5 @@ export const computePickleballTimes = (selectedDate, time, selectedHours) => {
   const startTimeUtc = zonedTimeToUtc(startTimeInCaTz, CALIFORNIA_TIMEZONE);
   const endTimeUtc = zonedTimeToUtc(endTimeInCaTz, CALIFORNIA_TIMEZONE);
 
-  console.log(startTimeUtc, endTimeUtc);
   return { startTime: startTimeUtc, endTime: endTimeUtc };
 };

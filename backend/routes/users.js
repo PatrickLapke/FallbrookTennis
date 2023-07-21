@@ -1,6 +1,7 @@
 const bcryptjs = require("bcryptjs");
 const _ = require("lodash");
 const express = require("express");
+const auth = require("../middleware/auth");
 
 let nanoid;
 import("nanoid").then((nano) => {
@@ -39,7 +40,23 @@ router.post("/", async (req, res) => {
   res
     .status(201)
     .header("x-auth-token", token)
+    .header("x-user-id", user._id)
     .send(_.pick(user, ["name", "email"]));
+});
+
+router.post("/resendVerification", auth, async (req, res) => {
+  try {
+    let user = await User.findOne({ _id: req.body.userId });
+    if (!user) return res.status(404).send("The user was not found.");
+
+    const token = req.header("x-auth-token");
+
+    await sendVerification(user.email, token);
+
+    res.status(200).send("Email sent");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.post("/password-reset", async (req, res) => {

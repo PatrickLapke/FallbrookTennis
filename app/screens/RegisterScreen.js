@@ -3,6 +3,7 @@ import { Image, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 import axios from "axios";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SuccessScreen from "./SuccessScreen";
 import Screen from "../components/Screen";
@@ -34,6 +35,9 @@ function RegisterScreen({ navigation }) {
         password: password,
       });
 
+      await AsyncStorage.setItem("token", response.headers["x-auth-token"]);
+      await AsyncStorage.setItem("user._id", response.headers["x-user-id"]);
+
       if (response.status === 201) {
         console.log("New member registered successfully");
         setShowSuccess(true);
@@ -42,7 +46,7 @@ function RegisterScreen({ navigation }) {
         navigation.navigate("Home");
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     }
   };
 

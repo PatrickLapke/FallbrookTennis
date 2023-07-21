@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Alert, View, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import AppDateButton from "../components/AppDateButton";
 import AppPicker from "../components/AppPicker";
@@ -11,12 +9,14 @@ import { times } from "../components/times";
 import AppButtonRow from "../components/AppButtonRow";
 import CourtDisplayText from "../components/CourtDisplayText";
 import AppButton from "../components/AppButton";
-import { computePickleballTimes } from "../functions/computePickleballTimes";
 import colors from "../config/colors";
 import SuccessScreen from "./SuccessScreen";
 import AppDelay from "../components/AppDelay";
-
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+import {
+  fetchAvailablePickleballCourts,
+  handlePickleballBook,
+} from "../API/pickleballCourts";
+import { resendVerificationEmail } from "../API/users";
 
 function PickleballBookingScreen({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -28,6 +28,7 @@ function PickleballBookingScreen({ navigation }) {
   const [firstSelectionsMade, setFirstSelectionsMade] = useState(false);
   const [allSelectionsMade, setAllSelectionsMade] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState();
 
   const checkFirstSelections = () => {
     if (selectedDate && time && selectedHours !== null) {
@@ -42,30 +43,43 @@ function PickleballBookingScreen({ navigation }) {
   };
 
   useEffect(() => {
-    const fetchCourts = async () => {
+    if (errorMsg) {
+      Alert.alert("Error", errorMsg, [
+        { text: "Back", onPress: () => setErrorMsg("") },
+        {
+          text: "Resend Email",
+          onPress: () => {
+            resendEmail(), setErrorMsg("");
+          },
+        },
+      ]);
+      setErrorMsg("");
+    }
+  });
+
+  useEffect(() => {
+    const getCourts = async () => {
       if (time && selectedDate && selectedHours !== null) {
         try {
-          const { startTime, endTime } = computePickleballTimes(
+          const courts = await fetchAvailablePickleballCourts(
             selectedDate,
             time,
             selectedHours
           );
-          const response = await axios.get(
-            `http://${IP_SCHOOL}:3000/api/pickleballCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
-          );
-          if (Array.isArray(response.data) && response.data.length > 0) {
-            setCourts(response.data);
+
+          if (Array.isArray(courts) && courts.length > 0) {
+            setCourts(courts);
             setNoCourtsMessage("");
           } else {
             setCourts([]);
-            setNoCourtsMessage(response.data);
+            setNoCourtsMessage(courts);
           }
         } catch (error) {
           console.log(error);
         }
       }
     };
-    fetchCourts();
+    getCourts();
     checkFirstSelections();
     checkAllSelections();
   }, [time, selectedHours, selectedDate, selectedCourt]);
@@ -80,34 +94,45 @@ function PickleballBookingScreen({ navigation }) {
 
   const handlePost = async () => {
     try {
-      const { startTime, endTime } = computePickleballTimes(
+      const response = await handlePickleballBook(
         selectedDate,
         time,
-        selectedHours
+        selectedHours,
+        selectedCourt
       );
 
-      const response = await axios.post(
-        `http://${IP_SCHOOL}:3000/api/pickleballCourts/bookings`,
-        {
-          startTime: startTime,
-          endTime: endTime,
-          pickleballCourtId: selectedCourt._id,
-          userId: await AsyncStorage.getItem("user._id"),
-        },
-        {
-          headers: {
-            "x-auth-token": await AsyncStorage.getItem("token"),
-          },
-        }
-      );
       if (response.status === 201) {
         setShowSuccess(true);
         await AppDelay(1500);
         navigation.navigate("Home");
       }
-      console.log("Booking added successfully");
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
+      if (error.response.status === 401) {
+        setErrorMsg(error.response.data);
+      }
+    }
+  };
+
+  const resendEmail = async () => {
+    try {
+      const response = await resendVerificationEmail();
+
+      if (response.status === 200) {
+        Alert.alert(
+          "Email Sent",
+          "A verification email has been sent to your address.",
+          [{ text: "OK" }]
+        );
+      }
+    } catch (error) {
+      console.log("Error sending verification email:", error);
+
+      Alert.alert(
+        "Error",
+        "An error occurred while sending the verification email. Please try again.",
+        [{ text: "OK" }]
+      );
     }
   };
 

@@ -1,4 +1,5 @@
 const auth = require("../middleware/auth");
+const emailVerification = require("../middleware/emailVerification");
 const { tennisCourt, validate } = require("../models/tennisCourt");
 const express = require("express");
 const router = express.Router();
@@ -25,7 +26,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/bookings", auth, async (req, res) => {
+router.post("/bookings", auth, emailVerification, async (req, res) => {
   const { startTime, endTime, courtId, userId } = req.body;
 
   try {
