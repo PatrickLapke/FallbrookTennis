@@ -7,7 +7,10 @@ const checkOverlap = require("../../app/functions/checkOverlap");
 router.get("/", async (req, res) => {
   const { startTime, endTime } = req.query;
   try {
-    const pickleballCourts = await pickleballCourt.find().sort("courtName");
+    const pickleballCourts = await pickleballCourt
+      .find()
+      .collation({ locale: "en", numericOrdering: true })
+      .sort("courtName");
     const availableCourts = pickleballCourts.filter((pickleballCourt) => {
       return !checkOverlap(startTime, endTime, pickleballCourt.bookings);
     });

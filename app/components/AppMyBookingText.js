@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { format } from "date-fns";
+import { format as formatDate } from "date-fns";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppText from "./AppText";
@@ -11,11 +11,11 @@ function AppMyBookingText({ court, onPress }) {
     <View style={styles.container}>
       {court.bookings.map((booking) => (
         <View style={styles.textContainer} key={booking._id}>
-          <AppText style={styles.text}>{`${court.courtName}   ${format(
+          <AppText style={styles.text}>{`${court.courtName}   ${formatDate(
             new Date(booking.startTime),
             "MM/dd   HH:mm"
-          )} - ${format(new Date(booking.endTime), "HH:mm")}`}</AppText>
-          <TouchableOpacity onPress={() => onPress(booking._id)}>
+          )} - ${formatDate(new Date(booking.endTime), "HH:mm")}`}</AppText>
+          <TouchableOpacity onPress={() => onPress(booking._id, booking)}>
             <MaterialCommunityIcons
               name="delete-forever"
               size={35}
@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
-  icon: {},
   text: {
     fontSize: 25,
     margin: 5,
+    marginTop: 15,
   },
   textContainer: {
     alignItems: "center",

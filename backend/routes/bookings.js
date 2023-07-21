@@ -21,7 +21,15 @@ router.get("/pickleball", async (req, res) => {
         .send("User was not found with the decoded token provided.");
     }
 
-    const courts = await pickleballCourt.find({ "bookings.userId": user._id });
+    let courts = await pickleballCourt.find({ "bookings.userId": user._id });
+
+    courts = courts.map((court) => {
+      court.bookings = court.bookings.filter((booking) =>
+        booking.userId.equals(user._id)
+      );
+      return court;
+    });
+
     res.send(courts);
   } catch (error) {
     console.log("Error finding/decoding the token.", error);
@@ -33,7 +41,7 @@ router.get("/tennis", async (req, res) => {
   try {
     const token = req.header("x-auth-token");
     if (!token)
-      return res.status(401).send("Access denied. No token provided.");
+      return res.status(401).send("Access denied. No token provided."); //THIS IS JUST AUTH ISN'T IT?
 
     const decoded = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
     const user = await User.findOne({ _id: decoded._id });
@@ -44,6 +52,7 @@ router.get("/tennis", async (req, res) => {
     }
 
     const courts = await tennisCourt.find({ "bookings.userId": user._id });
+    // console.log(courts);
     res.send(courts);
   } catch (error) {
     console.log("Error finding/decoding the token.", error);

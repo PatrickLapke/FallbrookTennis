@@ -6,9 +6,22 @@ import AppMenuButton from "../components/AppMenuButton";
 import AppMenuModal from "../components/AppMenuModal";
 import colors from "../config/colors";
 import Screen from "../components/Screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("user._id");
+    } catch (error) {
+      console.log("Error during logout : ", error);
+      return;
+    }
+
+    navigation.reset({ index: 0, routes: [{ name: "Login" }] });
+  };
 
   return (
     <Screen style={styles.container}>
@@ -25,6 +38,7 @@ function HomeScreen({ navigation }) {
           {modalVisible && (
             <View style={styles.modalContainer}>
               <AppMenuModal
+                onLogout={handleLogout}
                 visible={modalVisible}
                 onClose={() => setModalVisible(!modalVisible)}
               ></AppMenuModal>

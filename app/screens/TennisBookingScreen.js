@@ -36,7 +36,7 @@ function TennisBooking({ navigation }) {
   };
 
   const checkAllSelections = () => {
-    if (selectedDate && time && isSingles && selectedCourt !== null) {
+    if (selectedDate && time && isSingles !== null && selectedCourt !== null) {
       setAllSelectionsMade(true);
     } else setAllSelectionsMade(false);
   };
@@ -52,7 +52,7 @@ function TennisBooking({ navigation }) {
           );
           //toISOString() converts this value to a string so in the backend, it needs to converted back to a date Object.
           const response = await axios.get(
-            `http://${IP_HOME}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+            `http://${IP_SCHOOL}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
           );
           if (Array.isArray(response.data) && response.data.length > 0) {
             setCourts(response.data);
@@ -86,9 +86,9 @@ function TennisBooking({ navigation }) {
         time,
         isSingles
       );
-
+      // console.log(startTime, endTime);
       const response = await axios.post(
-        `http://${IP_HOME}:3000/api/tennisCourts/bookings`,
+        `http://${IP_SCHOOL}:3000/api/tennisCourts/bookings`,
         {
           startTime: startTime,
           endTime: endTime,

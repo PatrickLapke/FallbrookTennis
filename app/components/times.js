@@ -1,7 +1,11 @@
-import { setHours, setMinutes, startOfTomorrow } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
+
+const CALIFORNIA_TIMEZONE = "America/Los_Angeles";
 
 const createFixedTimeDate = (hours, minutes = 0) => {
-  return setMinutes(setHours(startOfTomorrow(), hours), minutes);
+  const date = new Date();
+  date.setHours(hours, minutes, 0, 0);
+  return utcToZonedTime(date, CALIFORNIA_TIMEZONE);
 };
 
 export const times = [

@@ -1,17 +1,25 @@
-import { addHours, parse, setHours, setMinutes } from "date-fns";
+import { addHours, parse } from "date-fns";
+import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 
 export const computePickleballTimes = (selectedDate, time, selectedHours) => {
-  try {
-    let date = parse(selectedDate, "MM/dd", new Date());
-    let startTime = setHours(
-      setMinutes(date, time.value.getUTCMinutes()),
-      time.value.getUTCHours()
-    );
-    let startTimeCopy = new Date(startTime.getTime());
-    const endTime = addHours(startTimeCopy, selectedHours);
+  const CALIFORNIA_TIMEZONE = "America/Los_Angeles";
+  let dateInLocalTz = parse(selectedDate, "MM/dd", new Date());
 
-    return { startTime, endTime };
-  } catch (error) {
-    console.log(error);
-  }
+  const dateInCaTz = utcToZonedTime(dateInLocalTz, CALIFORNIA_TIMEZONE);
+
+  const startTimeInCaTz = new Date(
+    dateInCaTz.getFullYear(),
+    dateInCaTz.getMonth(),
+    dateInCaTz.getDate(),
+    time.value.getHours(),
+    time.value.getMinutes()
+  );
+
+  let endTimeInCaTz = addHours(startTimeInCaTz, selectedHours);
+
+  const startTimeUtc = zonedTimeToUtc(startTimeInCaTz, CALIFORNIA_TIMEZONE);
+  const endTimeUtc = zonedTimeToUtc(endTimeInCaTz, CALIFORNIA_TIMEZONE);
+
+  console.log(startTimeUtc, endTimeUtc);
+  return { startTime: startTimeUtc, endTime: endTimeUtc };
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
 import { Alert } from "react-native";
+import { format as formatDate } from "date-fns";
 
 import {
   fetchBookedPickleballCourts,
@@ -33,7 +34,6 @@ function MyBookings() {
   };
 
   useEffect(() => {
-    console.log("The value of showSuccess is now: ", showSuccess);
     fetchData();
   }, [showSuccess]);
 
@@ -56,10 +56,13 @@ function MyBookings() {
               <AppMyBookingText
                 key={tennisCourt._id}
                 court={tennisCourt}
-                onPress={async (bookingId) => {
+                onPress={async (bookingId, booking) => {
                   Alert.alert(
                     "Are you sure you want to delete this booking?",
-                    "This is a message",
+                    `${tennisCourt.courtName}  ${formatDate(
+                      new Date(booking.startTime),
+                      "MM/dd  HH:mm"
+                    )} - ${formatDate(new Date(booking.endTime), "HH:mm")}`,
                     [
                       {
                         text: "Cancel",
@@ -107,10 +110,14 @@ function MyBookings() {
               <AppMyBookingText
                 key={pickleballCourt._id}
                 court={pickleballCourt}
-                onPress={async (bookingId) => {
+                onPress={async (bookingId, booking) => {
                   Alert.alert(
                     "Are you sure you want to delete this booking?",
-                    "This is a message",
+                    `${pickleballCourt.courtName}  ${formatDate(
+                      new Date(booking.startTime),
+                      "MM/dd  HH:mm"
+                    )} - ${formatDate(new Date(booking.endTime), "HH:mm")}`,
+
                     [
                       {
                         text: "Cancel",
@@ -166,7 +173,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1000,
   },
   header: {
     justifyContent: "center",
