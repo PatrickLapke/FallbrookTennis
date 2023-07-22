@@ -30,7 +30,7 @@ router.get("/pickleball", async (req, res) => {
       return court;
     });
 
-    res.send(courts);
+    return res.status(200).send(courts);
   } catch (error) {
     console.log("Error finding/decoding the token.", error);
     return res.status(500).send("There was a server error.");
@@ -51,9 +51,16 @@ router.get("/tennis", async (req, res) => {
         .send("User was not found with the decoded token provided.");
     }
 
-    const courts = await tennisCourt.find({ "bookings.userId": user._id });
-    // console.log(courts);
-    res.send(courts);
+    let courts = await tennisCourt.find({ "bookings.userId": user._id });
+
+    courts = courts.map((court) => {
+      court.bookings = court.bookings.filter((booking) =>
+        booking.userId.equals(user._id)
+      );
+      return court;
+    });
+
+    return res.status(200).send(courts);
   } catch (error) {
     console.log("Error finding/decoding the token.", error);
     return res.status(500).send("There was a server error.");

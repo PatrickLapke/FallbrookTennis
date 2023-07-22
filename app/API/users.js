@@ -8,7 +8,7 @@ const resendVerificationEmail = async () => {
   const token = await AsyncStorage.getItem("token");
 
   const response = await axios.post(
-    `http://${IP_SCHOOL}:3000/api/users/resendVerification`,
+    `http://${IP_HOME}:3000/api/users/resendVerification`,
     { userId },
     {
       headers: {

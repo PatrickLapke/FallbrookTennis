@@ -20,7 +20,7 @@ import colors from "../config/colors";
 import AppText from "../components/AppText";
 import AppDelay from "../components/AppDelay";
 
-function MyBookings() {
+function MyBookings({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [pickleballCourts, setPickleballCourts] = useState([]);
   const [tennisCourts, setTennisCourts] = useState([]);
@@ -75,13 +75,15 @@ function MyBookings() {
                           const result = await deleteTennisCourtBooking(
                             bookingId
                           );
-                          if (result) {
+                          console.log(result.status);
+                          if (result.status === 200) {
                             await fetchData();
                             await AppDelay(1000);
                             setIsLoading(false);
                             setShowSuccess(true);
                             await AppDelay(1500);
                             setShowSuccess(false);
+                            navigation.navigate("Home");
                           } else {
                             console.log("HHHHHEEEEEELLLPPPP");
                           }

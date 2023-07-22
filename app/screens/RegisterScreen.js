@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LottieView from "lottie-react-native";
 
 import SuccessScreen from "./SuccessScreen";
 import Screen from "../components/Screen";
@@ -25,11 +26,15 @@ const validationSchema = Yup.object().shape({
 
 function RegisterScreen({ navigation }) {
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async (values) => {
     const { firstName, lastName, email, password } = values;
+
+    setIsLoading(true);
+
     try {
-      const response = await axios.post(`http://${IP_SCHOOL}:3000/api/users`, {
+      const response = await axios.post(`http://${IP_HOME}:3000/api/users`, {
         name: `${firstName} ${lastName}`,
         email: email,
         password: password,
@@ -39,7 +44,8 @@ function RegisterScreen({ navigation }) {
       await AsyncStorage.setItem("user._id", response.headers["x-user-id"]);
 
       if (response.status === 201) {
-        console.log("New member registered successfully");
+        await AppDelay(1000);
+        setIsLoading(false);
         setShowSuccess(true);
         await AppDelay(1500);
         setShowSuccess(false);
@@ -47,6 +53,8 @@ function RegisterScreen({ navigation }) {
       }
     } catch (error) {
       console.log(error.response.data);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -118,6 +126,15 @@ function RegisterScreen({ navigation }) {
           <SubmitButton title="Register" />
         </AppForm>
       </KeyboardAwareScrollView>
+      {isLoading && (
+        <View style={styles.overlay}>
+          <LottieView
+            source={require("../../app/assets/bouncing_ball.json")}
+            autoPlay
+            loop
+          />
+        </View>
+      )}
       {showSuccess && <SuccessScreen visible={showSuccess} loop />}
     </Screen>
   );
@@ -137,6 +154,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     height: 220,
     width: 220,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

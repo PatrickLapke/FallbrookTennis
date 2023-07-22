@@ -22,7 +22,7 @@ function LoginScreen({ navigation }) {
     const { email, password } = values;
 
     try {
-      const response = await axios.post(`http://${IP_SCHOOL}:3000/api/auth`, {
+      const response = await axios.post(`http://${IP_HOME}:3000/api/auth`, {
         email: email,
         password: password,
       });
