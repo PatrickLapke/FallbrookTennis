@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import AppPictureButton from "../components/AppPictureButton";
 import AppMenuButton from "../components/AppMenuButton";
 import AppMenuModal from "../components/AppMenuModal";
 import colors from "../config/colors";
 import Screen from "../components/Screen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
