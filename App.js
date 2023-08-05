@@ -21,16 +21,8 @@ const StackNavigator = () => (
       options={{ headerShown: false }}
     />
     <Stack.Screen name="Register" component={RegisterScreen} />
-    <Stack.Screen
-      name="Password-Reset"
-      component={PasswordResetScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="NewPasswordScreen"
-      component={NewPasswordScreen}
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name="Password Reset" component={PasswordResetScreen} />
+    <Stack.Screen name="New Password" component={NewPasswordScreen} />
     <Stack.Screen
       name="Home"
       component={HomeScreen}

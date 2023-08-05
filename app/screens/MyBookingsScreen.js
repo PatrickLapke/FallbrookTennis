@@ -137,6 +137,7 @@ function MyBookings({ navigation }) {
                             setShowSuccess(true);
                             await AppDelay(1500);
                             setShowSuccess(false);
+                            navigation.navigate("Home");
                           } else {
                             console.log("HHHHHEEEEEELLLPPPP");
                           }

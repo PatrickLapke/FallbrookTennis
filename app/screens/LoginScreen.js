@@ -85,7 +85,7 @@ function LoginScreen({ navigation }) {
           ></AppLinkText>
           <AppLink
             text={"Forgot Password?"}
-            onPress={() => navigation.navigate("Password-Reset")}
+            onPress={() => navigation.navigate("Password Reset")}
           ></AppLink>
         </AppForm>
       </KeyboardAwareScrollView>
