@@ -22,6 +22,7 @@ function AppPicker({
     <View style={[styles.container, { width }]}>
       {icon && (
         <MaterialCommunityIcons
+          testID="icon"
           name={icon}
           size={25}
           color={defaultStyles.colors.medium}
@@ -32,14 +33,16 @@ function AppPicker({
         {selectedItem ? selectedItem.label : placeholder}
       </AppText>
       <MaterialCommunityIcons
+        testID="dropdown-icon"
         name="chevron-down"
         size={25}
         color={defaultStyles.colors.medium}
         onPress={() => setModalVisible(true)}
       />
-      <Modal visible={modalVisible} animationType="slide">
+      <Modal testID="modal" visible={modalVisible} animationType="slide">
         <Screen>
           <Button
+            testID="close"
             title="close"
             onPress={() => setModalVisible(false)}
             color={colors.primary}

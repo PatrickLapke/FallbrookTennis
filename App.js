@@ -20,11 +20,7 @@ const StackNavigator = () => (
       component={LoginScreen}
       options={{ headerShown: false }}
     />
-    <Stack.Screen
-      name="Register"
-      component={RegisterScreen}
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name="Register" component={RegisterScreen} />
     <Stack.Screen
       name="Password-Reset"
       component={PasswordResetScreen}
@@ -40,21 +36,12 @@ const StackNavigator = () => (
       component={HomeScreen}
       options={{ headerShown: false }}
     />
+    <Stack.Screen name="Tennis Court Booking" component={TennisBookingScreen} />
     <Stack.Screen
-      name="TennisBooking"
-      component={TennisBookingScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="PickleballBooking"
+      name="Pickleball Court Booking"
       component={PickleballBookingScreen}
-      options={{ headerShown: false }}
     />
-    <Stack.Screen
-      name="MyBookings"
-      component={MyBookingsScreen}
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name="My Bookings" component={MyBookingsScreen} />
   </Stack.Navigator>
 );
 

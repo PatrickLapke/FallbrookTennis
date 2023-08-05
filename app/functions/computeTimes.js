@@ -21,5 +21,6 @@ export const computeTimes = (selectedDate, time, isSingles) => {
   const startTimeUtc = zonedTimeToUtc(startTimeInCaTz, CALIFORNIA_TIMEZONE);
   const endTimeUtc = zonedTimeToUtc(endTimeInCaTz, CALIFORNIA_TIMEZONE);
 
+  console.log(startTimeUtc, endTimeUtc);
   return { startTime: startTimeUtc, endTime: endTimeUtc };
 };

@@ -10,6 +10,7 @@ function AppMenuButton({ onPress }) {
         size={46}
         color="white"
         onPress={onPress}
+        testID="menu-button-icon"
       ></MaterialCommunityIcons>
     </TouchableOpacity>
   );

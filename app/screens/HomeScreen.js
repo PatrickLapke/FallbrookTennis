@@ -51,17 +51,17 @@ function HomeScreen({ navigation }) {
         <AppPictureButton
           image={require("../assets/tennis2.png")}
           text={"Book a Tennis Court"}
-          onPress={() => navigation.navigate("TennisBooking")}
+          onPress={() => navigation.navigate("Tennis Court Booking")}
         ></AppPictureButton>
         <AppPictureButton
           image={require("../assets/pickleball2.png")}
           text={"Book a Pickleball Court"}
-          onPress={() => navigation.navigate("PickleballBooking")}
+          onPress={() => navigation.navigate("Pickleball Court Booking")}
         ></AppPictureButton>
         <AppPictureButton
           image={require("../assets/proshop2.png")}
           text={"My Bookings"}
-          onPress={() => navigation.navigate("MyBookings")}
+          onPress={() => navigation.navigate("My Bookings")}
         ></AppPictureButton>
         <AppPictureButton
           image={require("../assets/overlook2.png")}

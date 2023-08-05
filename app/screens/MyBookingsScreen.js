@@ -15,7 +15,6 @@ import {
 import AppDisplayBox from "../components/AppDisplayBox";
 import AppMyBookingText from "../components/AppMyBookingText";
 import SuccessScreen from "./SuccessScreen";
-import Screen from "../components/Screen";
 import colors from "../config/colors";
 import AppText from "../components/AppText";
 import AppDelay from "../components/AppDelay";
@@ -29,6 +28,7 @@ function MyBookings({ navigation }) {
   const fetchData = async () => {
     const tennisBookings = await fetchTennisBookings();
     const bookedPickleballCourts = await fetchBookedPickleballCourts();
+
     setTennisCourts(tennisBookings);
     setPickleballCourts(bookedPickleballCourts);
   };
@@ -38,7 +38,7 @@ function MyBookings({ navigation }) {
   }, [showSuccess]);
 
   return (
-    <Screen>
+    <>
       {/* Start of Tennis box */}
 
       <View style={styles.container}>
@@ -160,7 +160,7 @@ function MyBookings({ navigation }) {
         )}
       </View>
       {showSuccess && <SuccessScreen visible={showSuccess} />}
-    </Screen>
+    </>
   );
 }
 

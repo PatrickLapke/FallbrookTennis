@@ -4,7 +4,6 @@ import { Alert, View, StyleSheet } from "react-native";
 import AppDateButton from "../components/AppDateButton";
 import AppPicker from "../components/AppPicker";
 import AppDisplayBox from "../components/AppDisplayBox";
-import Screen from "../components/Screen";
 import { times } from "../components/times";
 import AppButtonRow from "../components/AppButtonRow";
 import CourtDisplayText from "../components/CourtDisplayText";
@@ -137,7 +136,7 @@ function PickleballBookingScreen({ navigation }) {
   };
 
   return (
-    <Screen>
+    <>
       <View style={styles.container}>
         <AppDateButton
           selectedDate={selectedDate}
@@ -183,7 +182,7 @@ function PickleballBookingScreen({ navigation }) {
         />
       </View>
       {showSuccess && <SuccessScreen visible={showSuccess} />}
-    </Screen>
+    </>
   );
 }
 

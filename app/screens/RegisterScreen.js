@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieView from "lottie-react-native";
 
 import SuccessScreen from "./SuccessScreen";
-import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import colors from "../config/colors";
 import AppDelay from "../components/AppDelay";
@@ -59,7 +58,7 @@ function RegisterScreen({ navigation }) {
   };
 
   return (
-    <Screen style={styles.content}>
+    <View style={styles.content}>
       <KeyboardAwareScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.logoContainer}>
           <Image
@@ -136,13 +135,14 @@ function RegisterScreen({ navigation }) {
         </View>
       )}
       {showSuccess && <SuccessScreen visible={showSuccess} loop />}
-    </Screen>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   content: {
     backgroundColor: colors.white,
+    paddingTop: 5,
   },
   contentContainer: {
     justifyContent: "flex-end",

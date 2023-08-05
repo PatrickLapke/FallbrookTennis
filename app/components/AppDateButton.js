@@ -1,4 +1,4 @@
-import { addDays, addMonths, format } from "date-fns";
+import { addDays, format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AppText from "./AppText";
@@ -80,6 +80,9 @@ const styles = StyleSheet.create({
   datesContainer: {
     flexDirection: "row",
   },
+  backButton: {
+    marginRight: 10,
+  },
   dateBox: {
     flexDirection: "column",
     alignItems: "center",
@@ -104,7 +107,12 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
   },
-  monthText: { marginLeft: 10 },
+  monthText: {
+    marginLeft: 10,
+    alignItems: "center",
+
+    flexDirection: "row",
+  },
 });
 
 export default AppBoxButton;

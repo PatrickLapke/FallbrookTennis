@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import Screen from "../components/Screen";
 
 import AppPicker from "../components/AppPicker";
 import Toggle from "../components/Toggle";
@@ -140,9 +139,10 @@ function TennisBooking({ navigation }) {
   };
 
   return (
-    <Screen>
+    <>
       <View style={styles.container}>
         <AppBoxButton
+          backButton
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         ></AppBoxButton>
@@ -182,12 +182,17 @@ function TennisBooking({ navigation }) {
         />
       </View>
       {showSuccess && <SuccessScreen visible={showSuccess} />}
-    </Screen>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, marginBottom: 10, backgroundColor: colors.white },
+  container: {
+    flex: 1,
+    marginBottom: 10,
+    backgroundColor: colors.white,
+    marginTop: 5,
+  },
 });
 
 export default TennisBooking;
