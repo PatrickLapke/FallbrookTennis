@@ -8,7 +8,7 @@ module.exports = async function (req, res, next) {
     if (!user.isVerified) {
       console.log(user.isVerified);
       return res
-        .status(401)
+        .status(406)
         .send("Access denied. Please register your email address.");
     }
 

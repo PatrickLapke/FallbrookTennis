@@ -17,16 +17,18 @@ router.get("/", async (req, res) => {
     });
     if (availableCourts.length === 0) {
       return res
-        .status(200)
+        .status(404)
         .json("No courts available at the selected date and time.");
-    } else res.send(availableCourts);
+    } else res.status(200).send(availableCourts);
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .send("Internal Server Error. Please try again later.");
   }
 });
 
 router.post("/bookings", auth, emailVerification, async (req, res) => {
-  console.log("hit");
   const { startTime, endTime, pickleballCourtId, userId } = req.body;
   try {
     const court = await pickleballCourt.findById(pickleballCourtId);
