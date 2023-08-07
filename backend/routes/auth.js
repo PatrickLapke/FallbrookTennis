@@ -5,6 +5,49 @@ const { User, validate } = require("../models/user");
 const express = require("express");
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/auth:
+ *   post:
+ *     summary: Authenticate a user during login.
+ *     description: Use to authenticate a user based on email and password.
+ *     tags:
+ *       - Auth
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's email.
+ *               password:
+ *                 type: string
+ *                 description: The user's password.
+ *     responses:
+ *       200:
+ *         description: Successfully authenticated user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 _id:
+ *                   type: string
+ *       400:
+ *         description: Invalid email or password.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
 router.post("/", async (req, res) => {
   try {
     const { error } = validateRequest(req.body);
@@ -29,6 +72,7 @@ router.post("/", async (req, res) => {
       .send(_.pick(user, ["name", "email", "_id"]));
   } catch (error) {
     console.log(error);
+    res.status(500).send("Internal Server Error. Please try again later.");
   }
 });
 

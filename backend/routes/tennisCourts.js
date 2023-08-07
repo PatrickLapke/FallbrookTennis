@@ -5,6 +5,93 @@ const express = require("express");
 const router = express.Router();
 const checkOverlap = require("../../app/functions/checkOverlap");
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Get available tennis courts
+ *     tags:
+ *       - Tennis Courts
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: startTime
+ *         description: Start time for availability check.
+ *         in: query
+ *         required: true
+ *         type: string
+ *       - name: endTime
+ *         description: End time for availability check.
+ *         in: query
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: A list of available tennis courts or a message indicating none are available.
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: object
+ *       500:
+ *         description: Internal Server Error.
+ *
+ * /bookings:
+ *   post:
+ *     description: Book a tennis court
+ *     tags:
+ *       - Bookings
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: body
+ *         name: booking
+ *         description: Booking details.
+ *         schema:
+ *           type: object
+ *           required:
+ *             - startTime
+ *             - endTime
+ *             - courtId
+ *             - userId
+ *           properties:
+ *             startTime:
+ *               type: string
+ *             endTime:
+ *               type: string
+ *             courtId:
+ *               type: string
+ *             userId:
+ *               type: string
+ *     responses:
+ *       201:
+ *         description: Booking added to tennis court.
+ *       404:
+ *         description: Could not find the tennis court.
+ *       500:
+ *         description: Internal Server Error.
+ *
+ * definitions:
+ *   TennisCourt:
+ *     type: object
+ *     properties:
+ *       courtName:
+ *         type: string
+ *       bookings:
+ *         type: array
+ *         items:
+ *           type: object
+ *
+ *   Booking:
+ *     type: object
+ *     properties:
+ *       startTime:
+ *         type: string
+ *       endTime:
+ *         type: string
+ *       userId:
+ *         type: string
+ */
+
 router.get("/", async (req, res) => {
   const { startTime, endTime } = req.query;
   try {
@@ -35,10 +122,13 @@ router.post("/bookings", auth, emailVerification, async (req, res) => {
     court.bookings.push({ startTime, endTime, userId });
 
     await court.save();
-    res.status(201).send("Booking added to court.");
+    return res.status(201).send("Booking added to court.");
   } catch (error) {
     console.log("Some error in the backend for posting a tennis court");
     console.log(error);
+    return res
+      .status(500)
+      .send("Internal Server Error. Please try again later.");
   }
 });
 
