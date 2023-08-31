@@ -6,7 +6,7 @@ const { User } = require("../models/user");
 
 /**
  * @swagger
- * /{token}:
+ * /api/verify/{token}:
  *   get:
  *     description: Verify a user account using a token
  *     tags:

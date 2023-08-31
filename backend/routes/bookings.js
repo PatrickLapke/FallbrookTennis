@@ -9,10 +9,10 @@ const router = express.Router();
  * @swagger
  * /api/bookings/pickleball:
  *   get:
- *     summary: Retrieve booked pickleball courts for a user.
+ *
  *     description: Retrieve all pickleball courts that the authenticated user has booked.
  *     tags:
- *       - Courts
+ *       - Bookings
  *     responses:
  *       200:
  *         description: A list of booked pickleball courts.
@@ -29,10 +29,10 @@ const router = express.Router();
  *
  * /api/bookings/tennis:
  *   get:
- *     summary: Retrieve booked tennis courts for a user.
+ *
  *     description: Retrieve all tennis courts that the authenticated user has booked.
  *     tags:
- *       - Courts
+ *       - Bookings
  *     responses:
  *       200:
  *         description: A list of booked tennis courts.
@@ -49,10 +49,10 @@ const router = express.Router();
  *
  * /api/bookings/pickleball/{bookingId}:
  *   delete:
- *     summary: Delete a pickleball court booking.
+ *
  *     description: Delete a specific booking from a pickleball court.
  *     tags:
- *       - Courts
+ *       - Bookings
  *     parameters:
  *       - in: path
  *         name: bookingId
@@ -70,10 +70,10 @@ const router = express.Router();
  *
  * /api/bookings/tennis/{bookingId}:
  *   delete:
- *     summary: Delete a tennis court booking.
+ *
  *     description: Delete a specific booking from a tennis court.
  *     tags:
- *       - Courts
+ *       - Bookings
  *     parameters:
  *       - in: path
  *         name: bookingId

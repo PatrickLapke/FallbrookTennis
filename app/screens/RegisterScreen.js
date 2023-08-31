@@ -11,7 +11,7 @@ import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import colors from "../config/colors";
 import AppDelay from "../components/AppDelay";
 
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+const { IP_HOME, IP_SCHOOL, IP_TESTER } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required().label("First Name"),
@@ -33,7 +33,7 @@ function RegisterScreen({ navigation }) {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`http://${IP_HOME}:3000/api/users`, {
+      const response = await axios.post(`http://${IP_TESTER}:3000/api/users`, {
         name: `${firstName} ${lastName}`,
         email: email,
         password: password,

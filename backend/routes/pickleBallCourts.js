@@ -37,7 +37,7 @@ const checkOverlap = require("../../app/functions/checkOverlap");
  *       500:
  *         description: Internal Server Error.
  *
- * /api/pickleballCourts:
+ * /api/pickleballCourts/bookings:
  *   post:
  *     description: Book a pickleball court
  *     tags:
@@ -96,7 +96,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/bookings", emailVerification, async (req, res) => {
+router.post("/bookings", auth, emailVerification, async (req, res) => {
   const { startTime, endTime, pickleballCourtId, userId } = req.body;
   try {
     const court = await pickleballCourt.findById(pickleballCourtId);

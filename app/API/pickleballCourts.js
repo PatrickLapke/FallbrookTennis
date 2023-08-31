@@ -3,12 +3,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { computePickleballTimes } from "../functions/computePickleballTimes";
 
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+const { IP_HOME, IP_SCHOOL, IP_TESTER } = require("../IP/ip");
 
 const fetchBookedPickleballCourts = async () => {
   try {
     const response = await axios.get(
-      `http://${IP_HOME}:3000/api/bookings/pickleball`,
+      `http://${IP_TESTER}:3000/api/bookings/pickleball`,
       {
         headers: {
           "x-auth-token": await AsyncStorage.getItem("token"),
@@ -33,7 +33,7 @@ const fetchAvailablePickleballCourts = async (
     selectedHours
   );
   const response = await axios.get(
-    `http://${IP_HOME}:3000/api/pickleballCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+    `http://${IP_TESTER}:3000/api/pickleballCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
   );
   return response.data;
 };
@@ -54,7 +54,7 @@ const handlePickleballBook = async (
   const token = await AsyncStorage.getItem("token");
 
   const response = await axios.post(
-    `http://${IP_HOME}:3000/api/pickleballCourts/bookings`,
+    `http://${IP_TESTER}:3000/api/pickleballCourts/bookings`,
     {
       startTime: startTime,
       endTime: endTime,
@@ -73,7 +73,7 @@ const handlePickleballBook = async (
 const deletePickleballCourt = async (bookingId) => {
   try {
     const response = await axios.delete(
-      `http://${IP_HOME}:3000/api/bookings/pickleball/${bookingId}`
+      `http://${IP_TESTER}:3000/api/bookings/pickleball/${bookingId}`
     );
     if (response.status === 200) {
       return response.data;

@@ -15,7 +15,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /:
+ * /api/users:
  *   post:
  *     description: Register a new user
  *     tags:
@@ -47,11 +47,11 @@ const router = express.Router();
  *       500:
  *         description: Internal Server Error.
  *
- * /resendVerification:
+ * /api/users/resendVerification:
  *   post:
  *     description: Resend the verification email to a user
  *     tags:
- *       - Verification
+ *       - Users
  *     produces:
  *       - application/json
  *     parameters:
@@ -73,11 +73,11 @@ const router = express.Router();
  *       500:
  *         description: Internal Server Error.
  *
- * /password-reset:
+ * /api/users/password-reset:
  *   post:
  *     description: Request a password reset token
  *     tags:
- *       - Password Reset
+ *       - Users
  *     produces:
  *       - application/json
  *     parameters:
@@ -99,11 +99,11 @@ const router = express.Router();
  *       500:
  *         description: Internal Server Error.
  *
- * /password-reset/confirm:
+ * /api/users/password-reset/confirm:
  *   post:
  *     description: Confirm the received password reset token
  *     tags:
- *       - Password Reset
+ *       - Users
  *     produces:
  *       - application/json
  *     parameters:
@@ -125,11 +125,11 @@ const router = express.Router();
  *       500:
  *         description: Internal Server Error.
  *
- * /change-password:
+ * /api/users/change-password:
  *   post:
  *     description: Change the user's password using the reset token
  *     tags:
- *       - Password Reset
+ *       - Users
  *     produces:
  *       - application/json
  *     parameters:

@@ -1,14 +1,14 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+const { IP_HOME, IP_SCHOOL, IP_TESTER } = require("../IP/ip");
 
 const resendVerificationEmail = async () => {
   const userId = await AsyncStorage.getItem("user._id");
   const token = await AsyncStorage.getItem("token");
 
   const response = await axios.post(
-    `http://${IP_HOME}:3000/api/users/resendVerification`,
+    `http://${IP_TESTER}:3000/api/users/resendVerification`,
     { userId },
     {
       headers: {

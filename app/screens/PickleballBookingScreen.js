@@ -43,6 +43,7 @@ function PickleballBookingScreen({ navigation }) {
 
   useEffect(() => {
     if (errorMsg) {
+      console.log("Here");
       Alert.alert("Error", errorMsg, [
         { text: "Back", onPress: () => setErrorMsg("") },
         {

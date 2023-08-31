@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import colors from "../config/colors";
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+const { IP_HOME, IP_SCHOOL, IP_TESTER } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -18,7 +18,7 @@ function PasswordResetScreen({ navigation }) {
     const { email } = values;
     try {
       const response = await axios.post(
-        `http://${IP_HOME}:3000/api/users/password-reset`,
+        `http://${IP_TESTER}:3000/api/users/password-reset`,
         {
           email: email,
         }
@@ -36,7 +36,7 @@ function PasswordResetScreen({ navigation }) {
     console.log(passwordResetToken);
     try {
       const response = await axios.post(
-        `http://${IP_HOME}:3000/api/users/password-reset/confirm`,
+        `http://${IP_TESTER}:3000/api/users/password-reset/confirm`,
         { passwordResetToken: passwordResetToken }
       );
       if (response.status === 200) {

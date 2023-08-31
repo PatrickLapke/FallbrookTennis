@@ -7,7 +7,7 @@ import AppDelay from "../components/AppDelay";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import SuccessScreen from "../screens/SuccessScreen";
 import colors from "../config/colors";
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+const { IP_HOME, IP_SCHOOL, IP_TESTER } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(5).label("Password"),
@@ -28,7 +28,7 @@ function NewPasswordScreen({ navigation, route }) {
 
     try {
       const response = await axios.post(
-        `http://${IP_HOME}:3000/api/users/change-password`,
+        `http://${IP_TESTER}:3000/api/users/change-password`,
         {
           password: password,
           passwordResetToken: passwordResetToken,

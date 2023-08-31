@@ -1,4 +1,7 @@
 module.exports = {
   testEnvironment: "node",
-  transform: {},
+  transform: {
+    "^.+\\.[t|j]s$": "babel-jest",
+  },
+  transformIgnorePatterns: ["/node_modules/(?!nanoid/)"],
 };

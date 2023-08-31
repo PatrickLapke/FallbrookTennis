@@ -3,12 +3,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { computeTimes } from "../functions/computeTimes";
 
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+const { IP_HOME, IP_SCHOOL, IP_TESTER } = require("../IP/ip");
 
 const fetchTennisBookings = async () => {
   try {
     const response = await axios.get(
-      `http://${IP_HOME}:3000/api/bookings/tennis`,
+      `http://${IP_TESTER}:3000/api/bookings/tennis`,
       {
         headers: {
           "x-auth-token": await AsyncStorage.getItem("token"),
@@ -25,7 +25,7 @@ const fetchTennisBookings = async () => {
 const fetchAvailableTennisCourts = async (selectedDate, time, isSingles) => {
   const { startTime, endTime } = computeTimes(selectedDate, time, isSingles);
   const response = await axios.get(
-    `http://${IP_HOME}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
+    `http://${IP_TESTER}:3000/api/tennisCourts?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`
   );
 
   return response.data;
@@ -43,7 +43,7 @@ const handleTennisBook = async (
   const token = await AsyncStorage.getItem("token");
 
   const response = await axios.post(
-    `http://${IP_HOME}:3000/api/tennisCourts/bookings`,
+    `http://${IP_TESTER}:3000/api/tennisCourts/bookings`,
     {
       startTime: startTime,
       endTime: endTime,
@@ -63,7 +63,7 @@ const handleTennisBook = async (
 const deleteTennisCourtBooking = async (bookingId) => {
   try {
     const response = await axios.delete(
-      `http://${IP_HOME}:3000/api/bookings/tennis/${bookingId}`
+      `http://${IP_TESTER}:3000/api/bookings/tennis/${bookingId}`
     );
     if (response.status === 200) {
       return response;

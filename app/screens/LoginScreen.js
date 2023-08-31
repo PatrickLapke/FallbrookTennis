@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Alert, Image, StyleSheet } from "react-native";
 import * as Yup from "yup";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,7 +10,7 @@ import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import colors from "../config/colors";
 import AppLink from "../components/AppLink";
 import AppLinkText from "../components/AppLinkText";
-const { IP_HOME, IP_SCHOOL } = require("../IP/ip");
+const { IP_HOME, IP_SCHOOL, IP_TESTER } = require("../IP/ip");
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -22,7 +22,7 @@ function LoginScreen({ navigation }) {
     const { email, password } = values;
 
     try {
-      const response = await axios.post(`http://${IP_HOME}:3000/api/auth`, {
+      const response = await axios.post(`http://${IP_TESTER}:3000/api/auth`, {
         email: email,
         password: password,
       });
@@ -33,6 +33,12 @@ function LoginScreen({ navigation }) {
       navigation.navigate("Home");
     } catch (error) {
       if (error.response && error.response.data) {
+        if (error.response.data == "Invalid password") {
+          console.log("hello");
+          Alert.alert("Error", "The password you entered is incorrect.");
+        } else if (error.response.data == "Invalid email") {
+          Alert.alert("Error", "The email you entered is incorrect.");
+        }
         console.log(error.response.data);
       } else if (error.request) {
         console.log(error.request);

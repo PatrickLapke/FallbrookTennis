@@ -7,11 +7,11 @@ const checkOverlap = require("../../app/functions/checkOverlap");
 
 /**
  * @swagger
- * /:
+ * /api/tennisCourts:
  *   get:
  *     description: Get available tennis courts
  *     tags:
- *       - Tennis Courts
+ *       - tennisCourts
  *     produces:
  *       - application/json
  *     parameters:
@@ -35,11 +35,11 @@ const checkOverlap = require("../../app/functions/checkOverlap");
  *       500:
  *         description: Internal Server Error.
  *
- * /bookings:
+ * /api/tennisCourts/bookings:
  *   post:
  *     description: Book a tennis court
  *     tags:
- *       - Bookings
+ *       - tennisCourts
  *     produces:
  *       - application/json
  *     parameters:
@@ -118,6 +118,7 @@ router.post("/bookings", auth, emailVerification, async (req, res) => {
 
   try {
     const court = await tennisCourt.findById(courtId);
+
     if (!court) return res.status(404).send("Could not find the court.");
     court.bookings.push({ startTime, endTime, userId });
 
