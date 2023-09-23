@@ -33,7 +33,7 @@ function RegisterScreen({ navigation }) {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`http://${IP_TESTER}:3000/api/users`, {
+      const response = await axios.post(`http://${IP_HOME}:3000/api/users`, {
         name: `${firstName} ${lastName}`,
         email: email,
         password: password,

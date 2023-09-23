@@ -28,7 +28,7 @@ function NewPasswordScreen({ navigation, route }) {
 
     try {
       const response = await axios.post(
-        `http://${IP_TESTER}:3000/api/users/change-password`,
+        `http://${IP_HOME}:3000/api/users/change-password`,
         {
           password: password,
           passwordResetToken: passwordResetToken,
