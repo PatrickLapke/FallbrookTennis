@@ -4,4 +4,4 @@ The project, constructed using the MERN stack and React-Native, adopts a sprint-
 
 In addition to the development aspect, this project encompasses a wide range of topics, such as stakeholder evaluation, requirements gathering, high and low-level design, and testing/evaluation. Engaging in this comprehensive approach allowed me to traverse the entire software engineering lifecycle, thereby gaining a rich and valuable understanding. Further details on these topics can be found in the dissertation attached.
 
-To run this program, simply download all available files, set the IP_ADDRESS 
+
